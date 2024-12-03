@@ -59,12 +59,16 @@ export const authSlice = createSlice({
             state.profileData.isLoading = false;
             state.profileData.error = action.payload;
         },
+
+        clearAccessToken: (state) => {
+            state.authData.accessToken = null;
+        }
     }
 })
 
 export const {
     loginStart, loginSuccess, loginFail, loadProfileStart, loadProfileSuccess, loadProfileFail,
-    regFail, regSuccess, regStart
+    regFail, regSuccess, regStart, clearAccessToken
 } = authSlice.actions;
 
 export default authSlice.reducer;
