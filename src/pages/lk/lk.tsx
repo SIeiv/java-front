@@ -1,7 +1,7 @@
 import styles from "./lk.module.css";
 import {useNavigate} from "react-router";
 import {useAppDispatch, useAppSelector} from "@/hooks.ts";
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {Button} from "@/components/ui/button.tsx";
 import {clearAccessToken} from "@/store/auth/auth.slice.ts";
 
@@ -13,6 +13,8 @@ import {
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog"
+import {putAvatar} from "@/api/auth";
+import {getAvatarAC, putAvatarAC} from "@/store/auth/actionCreators.ts";
 
 const Lk = () => {
     const navigate = useNavigate();
@@ -20,8 +22,12 @@ const Lk = () => {
 
     const accessToken = useAppSelector(state => state.auth.authData.accessToken);
     const profile = useAppSelector(state => state.auth.profileData.profile);
+    const avatar = useAppSelector(state => state.auth.avatarData.avatar);
 
     const [avatarForm, setAvatarForm] = useState(true);
+
+
+    const avatarFileRef = useRef<HTMLInputElement>(null)
 
     useEffect(() => {
         if (!accessToken) {
@@ -29,19 +35,24 @@ const Lk = () => {
         }
     }, [accessToken]);
 
+    const handleAvatar = () => {
+        dispatch(putAvatarAC(avatarFileRef.current!.files!));
+        dispatch(getAvatarAC());
+    }
+
     return (
         <div className={"flex items-center justify-center w-full h-full bg-slate-50"}>
 
-            <Dialog open={avatarForm}>
+            <Dialog open={avatarForm} onOpenChange={() => {setAvatarForm(false)}}>
                 <DialogContent>
                     <DialogHeader>
                         <DialogTitle>Загрузить аватарку</DialogTitle>
                         <DialogDescription>
-
+                            <input type="file" ref={avatarFileRef}/>
                         </DialogDescription>
                     </DialogHeader>
                     <DialogFooter>
-                        <Button>Ок</Button>
+                        <Button onClick={handleAvatar}>Ок</Button>
                     </DialogFooter>
                 </DialogContent>
             </Dialog>
@@ -50,7 +61,7 @@ const Lk = () => {
                 <div className={"text-xl font-medium"}>Личный кабинет</div>
                 <div className={"flex items-center justify-center flex-col gap-3.5 w-full h-full"}>
                     <Avatar className={"w-48 h-48 text-8xl"}>
-                        <AvatarImage src=""/>
+                        <AvatarImage src={`data:image/img;base64, ${avatar}` }/>
                         <AvatarFallback className={"w-48 h-full pb-5"}>{profile ? profile.username[0] : "U"}</AvatarFallback>
                     </Avatar>
                     <div className={"text-xl"}>
@@ -58,7 +69,7 @@ const Lk = () => {
                         <div>email: {profile ? profile.email : "unknown email"}</div>
                     </div>
                     <div className={"flex items-center justify-center gap-1"}>
-                        <Button>Загрузить аватарку</Button>
+                        <Button onClick={() => {setAvatarForm(true)}}>Загрузить аватарку</Button>
                         <Button className={"bg-red-600 hover:bg-red-500"} onClick={() => {
                             dispatch(clearAccessToken())
                         }}>Выйти</Button>

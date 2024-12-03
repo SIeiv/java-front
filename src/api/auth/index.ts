@@ -11,3 +11,14 @@ export const register = (params: IRegisterRequest) =>
 
 export const getProfile = (): AxiosPromise<string> =>
     axiosInstance.get(endpoints.AUTH.PROFILE);
+
+export const putAvatar = (params: any) =>
+    axiosInstance.put(endpoints.AUTH.PUT_AVATAR, params, {
+        withCredentials: false,
+        headers: {
+            "Content-Type": "multipart/form-data"
+        }
+});
+
+export const getAvatar = (): AxiosPromise<string> =>
+    axiosInstance.get(endpoints.AUTH.GET_PICTURE);
