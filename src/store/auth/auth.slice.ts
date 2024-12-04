@@ -18,7 +18,9 @@ const initialState = {
     },
 
     avatarData: {
-        avatar: null as any
+        avatar: null as any,
+        isLoading: false as boolean,
+        error: null as null | string
     }
 }
 
@@ -67,15 +69,23 @@ export const authSlice = createSlice({
         clearAccessToken: (state) => {
             state.authData.accessToken = null;
         },
+        avatarStart: (state) => {
+            state.avatarData.isLoading = true
+        },
         avatarSuccess: (state, action: PayloadAction<any>) => {
             state.avatarData.avatar = action.payload;
+            state.avatarData.isLoading = false;
         },
+        avatarFail: (state, action: PayloadAction<string>) => {
+            state.avatarData.isLoading = false;
+            state.avatarData.error = action.payload;
+        }
     }
 })
 
 export const {
     loginStart, loginSuccess, loginFail, loadProfileStart, loadProfileSuccess, loadProfileFail,
-    regFail, regSuccess, regStart, avatarSuccess, clearAccessToken
+    regFail, regSuccess, avatarFail, avatarStart, regStart, avatarSuccess, clearAccessToken
 } = authSlice.actions;
 
 export default authSlice.reducer;

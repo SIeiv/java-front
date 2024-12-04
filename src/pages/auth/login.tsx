@@ -7,6 +7,12 @@ import {useEffect, useState} from "react";
 import {useDispatch} from "react-redux";
 import {loginUser} from "@/store/auth/actionCreators.ts";
 import {useAppSelector} from "@/hooks.ts";
+import loadingGif from "@/assets/bouncing-circles.svg";
+
+import {
+    AlertDialog,
+    AlertDialogContent,
+} from "@/components/ui/alert-dialog"
 
 const Login = () => {
     const dispatch = useDispatch();
@@ -17,6 +23,9 @@ const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
+    const [isLoginning, setIsLoginning] = useState(false);
+    const isLoginLoading = useAppSelector(state => state.auth.authData.isLoading);
+
     useEffect(() => {
         if (accessToken) {
             navigate("/lk");
@@ -24,11 +33,18 @@ const Login = () => {
     }, [accessToken]);
 
     const handleSubmit = () => {
+        setIsLoginning(true);
         dispatch(loginUser({email, password}));
     };
 
     return (
         <div className={"bg-slate-50 w-full h-full flex items-center justify-center"}>
+
+            <AlertDialog open={isLoginning && isLoginLoading}>
+                <AlertDialogContent className={"w-20 h-20 p-1"}>
+                    <img src={loadingGif} alt=""/>
+                </AlertDialogContent>
+            </AlertDialog>
 
             <div className={styles.registerbox + " bg-white rounded-2xl flex flex-col gap-2.5"}>
                 <div>

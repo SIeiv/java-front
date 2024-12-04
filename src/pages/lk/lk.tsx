@@ -1,4 +1,3 @@
-import styles from "./lk.module.css";
 import {useNavigate} from "react-router";
 import {useAppDispatch, useAppSelector} from "@/hooks.ts";
 import {useEffect, useRef, useState} from "react";
@@ -13,8 +12,8 @@ import {
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog"
-import {putAvatar} from "@/api/auth";
 import {getAvatarAC, putAvatarAC} from "@/store/auth/actionCreators.ts";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const Lk = () => {
     const navigate = useNavigate();
@@ -24,7 +23,10 @@ const Lk = () => {
     const profile = useAppSelector(state => state.auth.profileData.profile);
     const avatar = useAppSelector(state => state.auth.avatarData.avatar);
 
-    const [avatarForm, setAvatarForm] = useState(true);
+    const isAvatarLoading = useAppSelector(state => state.auth.avatarData.isLoading);
+    const isProfileLoading = useAppSelector(state => state.auth.profileData.isLoading);
+
+    const [avatarForm, setAvatarForm] = useState(false);
 
 
     const avatarFileRef = useRef<HTMLInputElement>(null)
@@ -35,8 +37,8 @@ const Lk = () => {
         }
     }, [accessToken]);
 
-    const handleAvatar = () => {
-        dispatch(putAvatarAC(avatarFileRef.current!.files!));
+    const handleAvatar = async () => {
+        await dispatch(putAvatarAC(avatarFileRef.current!.files!));
         dispatch(getAvatarAC());
     }
 
@@ -61,12 +63,25 @@ const Lk = () => {
                 <div className={"text-xl font-medium"}>Личный кабинет</div>
                 <div className={"flex items-center justify-center flex-col gap-3.5 w-full h-full"}>
                     <Avatar className={"w-48 h-48 text-8xl"}>
-                        <AvatarImage src={`data:image/img;base64, ${avatar}` }/>
-                        <AvatarFallback className={"w-48 h-full pb-5"}>{profile ? profile.username[0] : "U"}</AvatarFallback>
+                        {!isAvatarLoading
+                            ? <div>
+                                <AvatarImage src={avatar}/>
+                                <AvatarFallback className={"w-48 h-full pb-5"}>{profile ? profile.username[0] : "U"}</AvatarFallback>
+                            </div>
+                            : <Skeleton className="w-full h-full" />
+                        }
                     </Avatar>
                     <div className={"text-xl"}>
-                        <div>username: {profile ? profile.username : "unknown username"}</div>
-                        <div>email: {profile ? profile.email : "unknown email"}</div>
+                        {!isProfileLoading
+                            ? <div>
+                                <div>username: {profile ? profile.username : "unknown username"}</div>
+                                <div>email: {profile ? profile.email : "unknown email"}</div>
+                            </div>
+                            : <div>
+                                <Skeleton className="w-36 h-[56px]" />
+                            </div>
+                        }
+
                     </div>
                     <div className={"flex items-center justify-center gap-1"}>
                         <Button onClick={() => {setAvatarForm(true)}}>Загрузить аватарку</Button>

@@ -1,6 +1,8 @@
 import {ILoginRequest, IRegisterRequest} from "@/api/auth/types.ts";
 import {Dispatch} from "@reduxjs/toolkit";
 import {
+    avatarFail,
+    avatarStart,
     avatarSuccess,
     loadProfileStart,
     loadProfileSuccess,
@@ -23,6 +25,7 @@ export const loginUser =
             console.log(response);
             dispatch(loginSuccess(response.data));
             dispatch(getProfile());
+            dispatch(getAvatarAC());
 
         } catch (e: any) {
             console.error(e);
@@ -72,6 +75,15 @@ export const putAvatarAC = (data: FileList) => async (dispatch: Dispatch) => {
 }
 
 export const getAvatarAC = () => async (dispatch: Dispatch) => {
-    const request = await api.auth.getAvatar();
-    dispatch(avatarSuccess(request.data));
+    try {
+        dispatch(avatarStart());
+        const response = await api.auth.getAvatar();
+        const imageUrl = URL.createObjectURL(response.data);
+
+        dispatch(avatarSuccess(imageUrl));
+    } catch (e: any) {
+        console.error(e)
+        dispatch(avatarFail(e.message));
+    }
+
 }

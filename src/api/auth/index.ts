@@ -20,5 +20,7 @@ export const putAvatar = (params: any) =>
         }
 });
 
-export const getAvatar = (): AxiosPromise<string> =>
-    axiosInstance.get(endpoints.AUTH.GET_PICTURE);
+export const getAvatar = () =>
+    axiosInstance.get(endpoints.AUTH.GET_PICTURE, {
+        responseType: "blob"
+    });
