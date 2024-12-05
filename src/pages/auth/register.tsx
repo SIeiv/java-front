@@ -19,38 +19,41 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
+import Loading from "@/components/ui/loading.tsx";
 
 const Register = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const registerError = useAppSelector(state => state.auth.regData.error);
+    const isRegisterLoading = useAppSelector(state => state.auth.regData.isLoading);
 
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
     const [registerSuccessForm, setRegisterSuccessForm] = useState(false);
+    const [isRegistered, setIsRegister] = useState(false)
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         dispatch(registerUser({email, password, username}));
+        setIsRegister(true);
+    };
 
-        if (!registerError) {
+    useEffect(() => {
+        if (!registerError && isRegistered) {
             setRegisterSuccessForm(true);
             setUsername("");
             setEmail("");
             setPassword("");
-
-
+            setIsRegister(false);
         }
-    };
-
-    useEffect(() => {
-
-    }, [])
+    }, [registerError])
 
     return (
         <div className={"bg-slate-50 w-full h-full flex items-center justify-center"}>
+
+            <Loading dependence={isRegisterLoading}/>
 
             <AlertDialog open={registerSuccessForm}>
                 <AlertDialogTrigger></AlertDialogTrigger>
@@ -83,6 +86,9 @@ const Register = () => {
                     <AuthInput title={"Пароль"} placeholder={"Введите пароль"} value={password} onChange={setPassword}/>
                     {/*<AuthInput title={"Повторите пароль"} placeholder={"Повторите пароль"}/>*/}
 
+                </div>
+                <div className={"text-red-500"}>
+                    {registerError}
                 </div>
                 <div>
                     <Button onClick={handleSubmit} className={"w-full h-10"}>Создать аккаунт</Button>

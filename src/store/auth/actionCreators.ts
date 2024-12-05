@@ -29,7 +29,7 @@ export const loginUser =
 
         } catch (e: any) {
             console.error(e);
-            dispatch(loginFail(e.message));
+            dispatch(loginFail(e.response ? e.response.data : e.message));
         }
     }
 
@@ -43,7 +43,7 @@ export const registerUser = (data: IRegisterRequest) => async (dispatch: Dispatc
         dispatch(regSuccess());
     } catch (e: any) {
         console.error(e);
-        dispatch(regFail(e.message));
+        dispatch(regFail(e.response ? e.response.data : e.message));
     }
 }
 
@@ -54,13 +54,13 @@ export const getProfile = () => async (dispatch: Dispatch) => {
         const response = await api.auth.getProfile();
 
         dispatch(loadProfileSuccess(response.data));
-    } catch (e) {
+    } catch (e: any) {
         console.error(e);
         dispatch(loginFail(e.message));
     }
 }
 
-export const getAccessToken = () => (dispatch: Dispatch): string | null => {
+export const getAccessToken = () => (): string | null => {
     try {
         const accessToken = store.getState().auth.authData.accessToken;
         return accessToken;
@@ -70,7 +70,7 @@ export const getAccessToken = () => (dispatch: Dispatch): string | null => {
     }
 }
 
-export const putAvatarAC = (data: FileList) => async (dispatch: Dispatch) => {
+export const putAvatarAC = (data: FileList) => async () => {
     const request = await api.auth.putAvatar({picture: data[0]});
 }
 

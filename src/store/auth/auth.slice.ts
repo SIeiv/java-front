@@ -66,8 +66,10 @@ export const authSlice = createSlice({
             state.profileData.error = action.payload;
         },
 
-        clearAccessToken: (state) => {
+        clearProfileData: (state) => {
             state.authData.accessToken = null;
+            state.profileData.profile = null;
+            state.avatarData.avatar = null;
         },
         avatarStart: (state) => {
             state.avatarData.isLoading = true
@@ -84,8 +86,13 @@ export const authSlice = createSlice({
 })
 
 export const {
-    loginStart, loginSuccess, loginFail, loadProfileStart, loadProfileSuccess, loadProfileFail,
-    regFail, regSuccess, avatarFail, avatarStart, regStart, avatarSuccess, clearAccessToken
+    loginStart, loginSuccess,
+    loginFail, loadProfileStart,
+    loadProfileSuccess, loadProfileFail,
+    regFail, regSuccess,
+    avatarFail, avatarStart,
+    regStart, avatarSuccess,
+    clearProfileData
 } = authSlice.actions;
 
 export default authSlice.reducer;

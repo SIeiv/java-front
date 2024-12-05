@@ -2,7 +2,7 @@ import {useNavigate} from "react-router";
 import {useAppDispatch, useAppSelector} from "@/hooks.ts";
 import {useEffect, useRef, useState} from "react";
 import {Button} from "@/components/ui/button.tsx";
-import {clearAccessToken} from "@/store/auth/auth.slice.ts";
+import {clearProfileData} from "@/store/auth/auth.slice.ts";
 
 import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar"
 import {
@@ -40,6 +40,7 @@ const Lk = () => {
     const handleAvatar = async () => {
         await dispatch(putAvatarAC(avatarFileRef.current!.files!));
         dispatch(getAvatarAC());
+        setAvatarForm(false);
     }
 
     return (
@@ -86,7 +87,7 @@ const Lk = () => {
                     <div className={"flex items-center justify-center gap-1"}>
                         <Button onClick={() => {setAvatarForm(true)}}>Загрузить аватарку</Button>
                         <Button className={"bg-red-600 hover:bg-red-500"} onClick={() => {
-                            dispatch(clearAccessToken())
+                            dispatch(clearProfileData())
                         }}>Выйти</Button>
                     </div>
                 </div>

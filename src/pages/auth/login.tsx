@@ -7,12 +7,7 @@ import {useEffect, useState} from "react";
 import {useDispatch} from "react-redux";
 import {loginUser} from "@/store/auth/actionCreators.ts";
 import {useAppSelector} from "@/hooks.ts";
-import loadingGif from "@/assets/bouncing-circles.svg";
-
-import {
-    AlertDialog,
-    AlertDialogContent,
-} from "@/components/ui/alert-dialog"
+import Loading from "@/components/ui/loading.tsx";
 
 const Login = () => {
     const dispatch = useDispatch();
@@ -23,7 +18,8 @@ const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
-    const [isLoginning, setIsLoginning] = useState(false);
+    //const [isLoginning, setIsLoginning] = useState(false);
+    const loginError = useAppSelector(state => state.auth.authData.error);
     const isLoginLoading = useAppSelector(state => state.auth.authData.isLoading);
 
     useEffect(() => {
@@ -32,19 +28,20 @@ const Login = () => {
         }
     }, [accessToken]);
 
+    useEffect(() => {
+        setEmail("");
+        setPassword("");
+    }, [])
+
     const handleSubmit = () => {
-        setIsLoginning(true);
+        //setIsLoginning(true);
         dispatch(loginUser({email, password}));
     };
 
     return (
         <div className={"bg-slate-50 w-full h-full flex items-center justify-center"}>
 
-            <AlertDialog open={isLoginning && isLoginLoading}>
-                <AlertDialogContent className={"w-20 h-20 p-1"}>
-                    <img src={loadingGif} alt=""/>
-                </AlertDialogContent>
-            </AlertDialog>
+            <Loading dependence={isLoginLoading}/>
 
             <div className={styles.registerbox + " bg-white rounded-2xl flex flex-col gap-2.5"}>
                 <div>
@@ -53,6 +50,9 @@ const Login = () => {
                 <div className={"flex flex-col gap-1.5"}>
                     <AuthInput title={"Почта"} placeholder={"Введите почту"} value={email} onChange={setEmail}/>
                     <AuthInput title={"Пароль"} placeholder={"Введите пароль"} value={password} onChange={setPassword}/>
+                </div>
+                <div className={"text-red-500"}>
+                    {loginError}
                 </div>
                 <div>
                     <Button onClick={handleSubmit} className={"w-full h-10"}>Войти</Button>
