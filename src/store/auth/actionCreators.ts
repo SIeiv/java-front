@@ -1,14 +1,16 @@
 import {ILoginRequest, IRegisterRequest} from "@/api/auth/types.ts";
 import {Dispatch} from "@reduxjs/toolkit";
 import {
+    appInitializeFail,
+    appInitializeStart, appInitializeSuccess,
     avatarFail,
     avatarStart,
-    avatarSuccess,
+    avatarSuccess, loadProfileFail,
     loadProfileStart,
     loadProfileSuccess,
     loginFail,
     loginStart,
-    loginSuccess, regFail,
+    loginSuccess, logoutFail, logoutStart, logoutSuccess, regFail,
     regStart, regSuccess
 } from "@/store/auth/auth.slice.ts";
 import api from "../../api";
@@ -23,9 +25,8 @@ export const loginUser =
             const response = await api.auth.login(data);
 
             console.log(response);
+            await dispatch(getProfile());
             dispatch(loginSuccess(response.data));
-            dispatch(getProfile());
-            dispatch(getAvatarAC());
 
         } catch (e: any) {
             console.error(e);
@@ -33,7 +34,37 @@ export const loginUser =
         }
     }
 
-export const registerUser = (data: IRegisterRequest) => async (dispatch: Dispatch) => {
+export const appInitializeAC =
+    () => async (dispatch: Dispatch) => {
+        try {
+            dispatch(appInitializeStart());
+
+            await dispatch(getProfile());
+
+            dispatch(appInitializeSuccess());
+        } catch (e: any) {
+            console.error(e);
+            dispatch(appInitializeFail(e.response ? e.response.data : e.message));
+        }
+    }
+
+export const logoutUser =
+    () => async (dispatch: Dispatch) => {
+        try {
+            dispatch(logoutStart());
+
+            const response = await api.auth.logout();
+
+            console.log(response);
+            dispatch(logoutSuccess());
+
+        } catch (e: any) {
+            console.error(e);
+            dispatch(logoutFail(e.response ? e.response.data : e.message));
+        }
+    }
+
+export const registerUser = (data: IRegisterRequest) => async (dispatch: Dispatch): Promise<void> => {
     try {
         dispatch(regStart());
 
@@ -51,12 +82,12 @@ export const getProfile = () => async (dispatch: Dispatch) => {
     try {
         dispatch(loadProfileStart());
 
-        const response = await api.auth.getProfile();
+        const response = await api.profile.getProfile();
 
         dispatch(loadProfileSuccess(response.data));
     } catch (e: any) {
         console.error(e);
-        dispatch(loginFail(e.message));
+        dispatch(loadProfileFail(e.message));
     }
 }
 
@@ -71,13 +102,13 @@ export const getAccessToken = () => (): string | null => {
 }
 
 export const putAvatarAC = (data: FileList) => async () => {
-    const request = await api.auth.putAvatar({picture: data[0]});
+    const request = await api.profile.putAvatar({picture: data[0]});
 }
 
 export const getAvatarAC = () => async (dispatch: Dispatch) => {
     try {
         dispatch(avatarStart());
-        const response = await api.auth.getAvatar();
+        const response = await api.profile.getAvatar();
         const imageUrl = URL.createObjectURL(response.data);
 
         dispatch(avatarSuccess(imageUrl));

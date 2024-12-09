@@ -13,29 +13,20 @@ const Login = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const accessToken = useAppSelector(state => state.auth.authData.accessToken);
-
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
-    //const [isLoginning, setIsLoginning] = useState(false);
     const loginError = useAppSelector(state => state.auth.authData.error);
     const isLoginLoading = useAppSelector(state => state.auth.authData.isLoading);
-
-    useEffect(() => {
-        if (accessToken) {
-            navigate("/lk");
-        }
-    }, [accessToken]);
 
     useEffect(() => {
         setEmail("");
         setPassword("");
     }, [])
 
-    const handleSubmit = () => {
-        //setIsLoginning(true);
-        dispatch(loginUser({email, password}));
+    const handleSubmit = async () => {
+        await dispatch(loginUser({email, password}));
+        navigate("/lk");
     };
 
     return (

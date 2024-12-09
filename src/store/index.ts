@@ -2,10 +2,12 @@ import {configureStore} from "@reduxjs/toolkit";
 import authReducer from "./auth/auth.slice.ts"
 
 import logger from "redux-logger";
+import timetableReducer from "./timetable/timetable.slice.ts";
 
 export const store = configureStore({
     reducer: {
-       auth: authReducer
+        auth: authReducer,
+        timetable: timetableReducer,
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware().concat(...(process.env.NODE_ENV === "production" ? [logger] : [])),

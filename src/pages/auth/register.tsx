@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/alert-dialog"
 import Loading from "@/components/ui/loading.tsx";
 import {setRegisterError} from "@/store/auth/auth.slice.ts";
+/*import RegisterUserPermission from "@/pages/auth/register-user-permission.tsx";*/
 
 const Register = () => {
     const dispatch = useDispatch();
@@ -40,7 +41,7 @@ const Register = () => {
 
     const handleSubmit = async () => {
         if (password === passwordVerify) {
-            dispatch(registerUser({email, password, username}));
+            await dispatch(registerUser({email, password, username}));
             setIsRegister(true);
         } else {
             dispatch(setRegisterError("Введеные пароли должны совпадать"));
@@ -54,9 +55,9 @@ const Register = () => {
             setUsername("");
             setEmail("");
             setPassword("");
-            setIsRegister(false);
+            setPasswordVerify("");
         }
-    }, [registerError])
+    }, [isRegisterLoading, isRegistered]);
 
     return (
         <div className={"bg-slate-50 w-full h-full flex items-center justify-center"}>
@@ -74,7 +75,8 @@ const Register = () => {
                     </AlertDialogHeader>
                     <AlertDialogFooter>
                         <AlertDialogCancel onClick={() => {
-                            setRegisterSuccessForm(false)
+                            setRegisterSuccessForm(false);
+                            setIsRegister(false);
                         }}>Нет</AlertDialogCancel>
                         <AlertDialogAction onClick={() => {
                             navigate("/auth/login");
@@ -87,13 +89,13 @@ const Register = () => {
                 <div>
                     <Label className={"text-xl font-semibold text-slate-900"}>Создать аккаунт</Label>
                 </div>
-                <div className={"flex flex-col gap-1.5"}>
+                <div className={"flex flex-col items-start gap-1.5"}>
                     <AuthInput title={"Имя пользователя"} placeholder={"Введите имя пользователя"} value={username}
                                onChange={setUsername}/>
                     <AuthInput title={"Почта"} placeholder={"Введите почту"} value={email} onChange={setEmail}/>
                     <AuthInput title={"Пароль"} placeholder={"Введите пароль"} value={password} onChange={setPassword}/>
                     <AuthInput title={"Повторите пароль"} ref={verifyPasswordRef} value={passwordVerify} onChange={setPasswordVerify} placeholder={"Повторите пароль"}/>
-
+                    {/*<RegisterUserPermission items={["Пользователь", "Модератор", "Администратор"]}/>*/}
                 </div>
                 <div className={"text-red-500"}>
                     {registerError}

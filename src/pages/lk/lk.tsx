@@ -12,20 +12,22 @@ import {
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog"
-import {getAvatarAC, putAvatarAC} from "@/store/auth/actionCreators.ts";
+import {getAvatarAC, logoutUser, putAvatarAC} from "@/store/auth/actionCreators.ts";
 import { Skeleton } from "@/components/ui/skeleton";
 import {Input} from "@/components/ui/input.tsx";
+import Header from "@/components/header.tsx";
+import Loading from "@/components/ui/loading.tsx";
 
 const Lk = () => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
 
-    const accessToken = useAppSelector(state => state.auth.authData.accessToken);
     const profile = useAppSelector(state => state.auth.profileData.profile);
     const avatar = useAppSelector(state => state.auth.avatarData.avatar);
 
     const isAvatarLoading = useAppSelector(state => state.auth.avatarData.isLoading);
     const isProfileLoading = useAppSelector(state => state.auth.profileData.isLoading);
+    const isLogout = useAppSelector(state => state.auth.logoutData.isLoading);
 
     const [avatarForm, setAvatarForm] = useState(false);
 
@@ -33,10 +35,11 @@ const Lk = () => {
     const avatarFileRef = useRef<HTMLInputElement>(null)
 
     useEffect(() => {
-        if (!accessToken) {
+        if (!profile) {
             navigate("/auth/login");
         }
-    }, [accessToken]);
+        if (!avatar) dispatch(getAvatarAC());
+    }, [])
 
     const handleAvatar = async () => {
         await dispatch(putAvatarAC(avatarFileRef.current!.files!));
@@ -45,7 +48,10 @@ const Lk = () => {
     }
 
     return (
-        <div className={"flex items-center justify-center w-full h-full bg-slate-50"}>
+        <div className={"w-full h-full bg-slate-50"}>
+            <Header />
+
+            <Loading dependence={isLogout}/>
 
             <Dialog open={avatarForm} onOpenChange={() => {setAvatarForm(false)}}>
                 <DialogContent>
@@ -61,7 +67,7 @@ const Lk = () => {
                 </DialogContent>
             </Dialog>
 
-            <div className={"lk__main bg-white rounded-2xl box-border p-2.5"}>
+            <div className={"w-[1248px] h-[600px] mt-[48px] bg-white rounded-2xl box-border p-2.5 m-auto"}>
                 <div className={"text-xl font-medium"}>Личный кабинет</div>
                 <div className={"flex items-center justify-center flex-col gap-3.5 w-full h-full"}>
                     <Avatar className={"w-48 h-48 text-8xl"}>
@@ -87,8 +93,13 @@ const Lk = () => {
                     </div>
                     <div className={"flex items-center justify-center gap-1"}>
                         <Button onClick={() => {setAvatarForm(true)}}>Загрузить аватарку</Button>
-                        <Button className={"bg-red-600 hover:bg-red-500"} onClick={() => {
-                            dispatch(clearProfileData())
+                        <Button className={"bg-red-600 hover:bg-red-500"} onClick={async () => {
+                            await dispatch(logoutUser());
+                            dispatch(clearProfileData());
+                            if (!isLogout) {
+                                navigate("/auth/login");
+                            }
+
                         }}>Выйти</Button>
                     </div>
                 </div>

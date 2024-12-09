@@ -8,8 +8,3 @@ export interface IRegisterRequest {
     "password": string,
     "username": string,
 }
-
-export interface IProfileResponse {
-    "email": string,
-    "username": string,
-}

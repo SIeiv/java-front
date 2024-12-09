@@ -1,9 +1,13 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {IProfileResponse} from "@/api/auth/types.ts";
+import {IProfileResponse} from "@/api/profile/types.ts";
 
 const initialState = {
     authData: {
         accessToken: null as null | string,
+        isLoading: false as boolean,
+        error: null as null | string,
+    },
+    logoutData: {
         isLoading: false as boolean,
         error: null as null | string,
     },
@@ -19,6 +23,12 @@ const initialState = {
 
     avatarData: {
         avatar: null as any,
+        isLoading: false as boolean,
+        error: null as null | string
+    },
+
+    appInitializeData: {
+        initialized: false,
         isLoading: false as boolean,
         error: null as null | string
     }
@@ -39,6 +49,18 @@ export const authSlice = createSlice({
         loginFail: (state, action: PayloadAction<string>) => {
             state.authData.isLoading = false;
             state.authData.error = action.payload;
+        },
+
+        logoutStart: (state) => {
+            state.logoutData.isLoading = true;
+        },
+        logoutSuccess: (state) => {
+            state.logoutData.isLoading = false;
+            state.logoutData.error = null;
+        },
+        logoutFail: (state, action: PayloadAction<string>) => {
+            state.logoutData.isLoading = false;
+            state.logoutData.error = action.payload;
         },
 
         regStart: (state) => {
@@ -85,7 +107,19 @@ export const authSlice = createSlice({
 
         setRegisterError: (state, action: PayloadAction<string>) => {
             state.regData.error = action.payload;
-        }
+        },
+
+        appInitializeStart: (state) => {
+            state.appInitializeData.isLoading = true
+        },
+        appInitializeSuccess: (state) => {
+            state.appInitializeData.initialized = true;
+            state.appInitializeData.isLoading = false;
+        },
+        appInitializeFail: (state, action: PayloadAction<string>) => {
+            state.appInitializeData.isLoading = false;
+            state.appInitializeData.error = action.payload;
+        },
     }
 })
 
@@ -96,7 +130,7 @@ export const {
     regFail, regSuccess,
     avatarFail, avatarStart,
     regStart, avatarSuccess,
-    clearProfileData, setRegisterError
+    clearProfileData, setRegisterError, logoutStart, logoutSuccess, logoutFail, appInitializeStart, appInitializeSuccess, appInitializeFail
 } = authSlice.actions;
 
 export default authSlice.reducer;
