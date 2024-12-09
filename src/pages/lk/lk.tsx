@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/dialog"
 import {getAvatarAC, putAvatarAC} from "@/store/auth/actionCreators.ts";
 import { Skeleton } from "@/components/ui/skeleton";
+import {Input} from "@/components/ui/input.tsx";
 
 const Lk = () => {
     const navigate = useNavigate();
@@ -51,7 +52,7 @@ const Lk = () => {
                     <DialogHeader>
                         <DialogTitle>Загрузить аватарку</DialogTitle>
                         <DialogDescription>
-                            <input type="file" ref={avatarFileRef}/>
+                            <Input className={"mt-2"} type="file" ref={avatarFileRef}/>
                         </DialogDescription>
                     </DialogHeader>
                     <DialogFooter>

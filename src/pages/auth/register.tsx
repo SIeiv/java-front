@@ -3,7 +3,7 @@ import {Label} from "@/components/ui/label.tsx";
 import AuthInput from "@/pages/auth/auth-input.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import {NavLink, useNavigate} from "react-router";
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {useDispatch} from "react-redux";
 import {registerUser} from "@/store/auth/actionCreators.ts";
 import {useAppSelector} from "@/hooks.ts";
@@ -20,6 +20,7 @@ import {
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import Loading from "@/components/ui/loading.tsx";
+import {setRegisterError} from "@/store/auth/auth.slice.ts";
 
 const Register = () => {
     const dispatch = useDispatch();
@@ -28,16 +29,23 @@ const Register = () => {
     const registerError = useAppSelector(state => state.auth.regData.error);
     const isRegisterLoading = useAppSelector(state => state.auth.regData.isLoading);
 
+    const verifyPasswordRef = useRef<HTMLInputElement>(null)
+
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-
+    const [passwordVerify, setPasswordVerify] = useState("");
     const [registerSuccessForm, setRegisterSuccessForm] = useState(false);
     const [isRegistered, setIsRegister] = useState(false)
 
     const handleSubmit = async () => {
-        dispatch(registerUser({email, password, username}));
-        setIsRegister(true);
+        if (password === passwordVerify) {
+            dispatch(registerUser({email, password, username}));
+            setIsRegister(true);
+        } else {
+            dispatch(setRegisterError("Введеные пароли должны совпадать"));
+            verifyPasswordRef.current!.style.borderColor = "red"
+        }
     };
 
     useEffect(() => {
@@ -84,7 +92,7 @@ const Register = () => {
                                onChange={setUsername}/>
                     <AuthInput title={"Почта"} placeholder={"Введите почту"} value={email} onChange={setEmail}/>
                     <AuthInput title={"Пароль"} placeholder={"Введите пароль"} value={password} onChange={setPassword}/>
-                    {/*<AuthInput title={"Повторите пароль"} placeholder={"Повторите пароль"}/>*/}
+                    <AuthInput title={"Повторите пароль"} ref={verifyPasswordRef} value={passwordVerify} onChange={setPasswordVerify} placeholder={"Повторите пароль"}/>
 
                 </div>
                 <div className={"text-red-500"}>

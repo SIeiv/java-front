@@ -81,6 +81,10 @@ export const authSlice = createSlice({
         avatarFail: (state, action: PayloadAction<string>) => {
             state.avatarData.isLoading = false;
             state.avatarData.error = action.payload;
+        },
+
+        setRegisterError: (state, action: PayloadAction<string>) => {
+            state.regData.error = action.payload;
         }
     }
 })
@@ -92,7 +96,7 @@ export const {
     regFail, regSuccess,
     avatarFail, avatarStart,
     regStart, avatarSuccess,
-    clearProfileData
+    clearProfileData, setRegisterError
 } = authSlice.actions;
 
 export default authSlice.reducer;
