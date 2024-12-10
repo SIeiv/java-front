@@ -7,10 +7,13 @@ const endpoints = {
     PROFILE: {
         GET_PROFILE: "http://localhost:8080/api/secured/get-info",
         PUT_AVATAR: "http://localhost:8080/api/user/update-picture",
-        GET_PICTURE: "http://localhost:8080/api/user/get-picture"
+        GET_PICTURE: "http://localhost:8080/api/user/get-picture",
+        CURRENT_USER: "http://localhost:8080/api/user/current-user",
     },
     TIMETABLE: {
         GET_TIMETABLES: "http://localhost:8080/api/timetable/load",
+        GET_VIEWS: "http://localhost:8080/api/views/get-views-count",
+        ADD_TIMETABLE: "http://localhost:8080/api/timetable/upload",
     }
 
 }

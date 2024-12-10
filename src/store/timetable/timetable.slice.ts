@@ -7,6 +7,7 @@ const initialState = {
         timetable: null as null | Array<IGetTimetableItemResponse>,
         isLoading: false as boolean,
         error: null as null | string,
+        viewsCount: null as null | number
     }
 }
 
@@ -18,7 +19,8 @@ export const timetableSlice = createSlice({
             state.timetableData.isLoading = true;
         },
         timetableGetSuccess: (state, action) => {
-            state.timetableData.timetable = action.payload;
+            state.timetableData.timetable = action.payload.timetable;
+            state.timetableData.viewsCount = action.payload.viewsCount;
             state.timetableData.isLoading = false;
             state.timetableData.error = null;
         },

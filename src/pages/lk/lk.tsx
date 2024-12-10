@@ -23,6 +23,7 @@ const Lk = () => {
     const dispatch = useAppDispatch();
 
     const profile = useAppSelector(state => state.auth.profileData.profile);
+    const role = useAppSelector(state => state.auth.profileData.role);
     const avatar = useAppSelector(state => state.auth.avatarData.avatar);
 
     const isAvatarLoading = useAppSelector(state => state.auth.avatarData.isLoading);
@@ -68,7 +69,11 @@ const Lk = () => {
             </Dialog>
 
             <div className={"w-[1248px] h-[600px] mt-[48px] bg-white rounded-2xl box-border p-2.5 m-auto"}>
-                <div className={"text-xl font-medium"}>Личный кабинет</div>
+                <div className={"text-xl font-medium flex gap-2"}>
+                    <span>Личный кабинет</span>
+                    {role === "ROLE_MODERATOR" && <span className={"bg-green-600 text-white px-2 rounded-md"}>Moderator</span>}
+                    {role === "ROLE_ADMIN" && <span className={"bg-red-600 text-white px-2 rounded-md"}>Admin</span>}
+                </div>
                 <div className={"flex items-center justify-center flex-col gap-3.5 w-full h-full"}>
                     <Avatar className={"w-48 h-48 text-8xl"}>
                         {!isAvatarLoading

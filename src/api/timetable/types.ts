@@ -4,3 +4,8 @@ export interface IGetTimetableItemResponse {
     "publicationDate": string,
     "moderatorName": string
 }
+
+export interface IAddTimetable {
+    timetable: any,
+    groupName: string,
+}

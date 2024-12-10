@@ -82,9 +82,10 @@ export const getProfile = () => async (dispatch: Dispatch) => {
     try {
         dispatch(loadProfileStart());
 
-        const response = await api.profile.getProfile();
+        const responseProfile = await api.profile.getProfile();
+        const responseRole = await api.profile.getCurrentUser();
 
-        dispatch(loadProfileSuccess(response.data));
+        dispatch(loadProfileSuccess({profile: responseProfile.data, role: responseRole.data[1][0].authority}));
     } catch (e: any) {
         console.error(e);
         dispatch(loadProfileFail(e.message));

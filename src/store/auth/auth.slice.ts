@@ -19,6 +19,7 @@ const initialState = {
         profile: null as null | IProfileResponse,
         isLoading: false as boolean,
         error: null as null | string,
+        role: null as null | "ROLE_USER" | "ROLE_ADMIN" | "ROLE_MODERATOR",
     },
 
     avatarData: {
@@ -78,8 +79,9 @@ export const authSlice = createSlice({
         loadProfileStart: (state) => {
             state.profileData.isLoading = true;
         },
-        loadProfileSuccess: (state, action: PayloadAction<string>) => {
-            state.profileData.profile = action.payload;
+        loadProfileSuccess: (state, action) => {
+            state.profileData.profile = action.payload.profile;
+            state.profileData.role = action.payload.role;
             state.profileData.isLoading = false;
             state.profileData.error = null;
         },
