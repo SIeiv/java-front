@@ -30,11 +30,11 @@ const Timetable: FC<TimetableProps> = ({loading}) => {
     )
 
     const [addTimetableForm, setAddTimetableForm] = useState(false);
-    const [groupName, setGroupName] = useState("");
+    const [groupname, setGroupName] = useState("");
     const avatarFileRef = useRef<HTMLInputElement>(null);
 
     const handleAddTimetable = async () => {
-        await dispatch(addTimetableAC({groupName, timetable: avatarFileRef.current!.files!}));
+        await dispatch(addTimetableAC({groupname, timetable: avatarFileRef.current!.files!}));
         dispatch(getTimetableAC());
         setAddTimetableForm(false);
     }
@@ -47,7 +47,7 @@ const Timetable: FC<TimetableProps> = ({loading}) => {
                     <DialogHeader>
                         <DialogTitle>Добавить расписание</DialogTitle>
                         <DialogDescription>
-                            <Input placeholder={"Название группы"} value={groupName} onChange={(e) => {setGroupName(e.target.value)}}/>
+                            <Input placeholder={"Название группы"} value={groupname} onChange={(e) => {setGroupName(e.target.value)}}/>
                             <Input className={"mt-2"} type="file" ref={avatarFileRef}/>
                         </DialogDescription>
                     </DialogHeader>

@@ -40,7 +40,7 @@ const Login = () => {
                 </div>
                 <div className={"flex flex-col gap-1.5"}>
                     <AuthInput title={"Почта"} placeholder={"Введите почту"} value={email} onChange={setEmail}/>
-                    <AuthInput title={"Пароль"} placeholder={"Введите пароль"} value={password} onChange={setPassword}/>
+                    <AuthInput type={"password"} title={"Пароль"} placeholder={"Введите пароль"} value={password} onChange={setPassword}/>
                 </div>
                 <div className={"text-red-500"}>
                     {loginError}

@@ -93,8 +93,8 @@ const Register = () => {
                     <AuthInput title={"Имя пользователя"} placeholder={"Введите имя пользователя"} value={username}
                                onChange={setUsername}/>
                     <AuthInput title={"Почта"} placeholder={"Введите почту"} value={email} onChange={setEmail}/>
-                    <AuthInput title={"Пароль"} placeholder={"Введите пароль"} value={password} onChange={setPassword}/>
-                    <AuthInput title={"Повторите пароль"} ref={verifyPasswordRef} value={passwordVerify} onChange={setPasswordVerify} placeholder={"Повторите пароль"}/>
+                    <AuthInput type={"password"} title={"Пароль"} placeholder={"Введите пароль"} value={password} onChange={setPassword}/>
+                    <AuthInput type={"password"} title={"Повторите пароль"} ref={verifyPasswordRef} value={passwordVerify} onChange={setPasswordVerify} placeholder={"Повторите пароль"}/>
                     {/*<RegisterUserPermission items={["Пользователь", "Модератор", "Администратор"]}/>*/}
                 </div>
                 <div className={"text-red-500"}>

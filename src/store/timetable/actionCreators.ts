@@ -18,5 +18,7 @@ export const getTimetableAC = () => async (dispatch: Dispatch) => {
 }
 
 export const addTimetableAC = (data: IAddTimetable) => async () => {
-    const request = await api.timetable.addTimetable({groupName: data.groupName, timetable: data.timetable[0]});
+    const params = {groupname: data.groupname, timetable: data.timetable[0]}
+    console.log(params);
+    const request = await api.timetable.addTimetable(params);
 }

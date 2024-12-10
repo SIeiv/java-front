@@ -7,5 +7,5 @@ export interface IGetTimetableItemResponse {
 
 export interface IAddTimetable {
     timetable: any,
-    groupName: string,
+    groupname: string,
 }
