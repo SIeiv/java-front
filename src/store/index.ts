@@ -3,11 +3,13 @@ import authReducer from "./auth/auth.slice.ts"
 
 import logger from "redux-logger";
 import timetableReducer from "./timetable/timetable.slice.ts";
+import profileReducer from "./profile/profile.slice.ts";
 
 export const store = configureStore({
     reducer: {
         auth: authReducer,
         timetable: timetableReducer,
+        profile: profileReducer
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware().concat(...(process.env.NODE_ENV === "production" ? [logger] : [])),

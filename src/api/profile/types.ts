@@ -9,3 +9,10 @@ export interface IUser {
     email: string,
     roles: string
 }
+
+export interface IFavourite {
+    id: number,
+    groupName: string,
+    publicationDate: string,
+    moderatorName: string,
+}

@@ -1,7 +1,13 @@
 import {Dispatch} from "@reduxjs/toolkit";
 import api from "../../api";
-import {timetableGetFail, timetableGetStart, timetableGetSuccess} from "@/store/timetable/timetable.slice.ts";
+import {
+    localDeleteTimetable,
+    timetableGetFail,
+    timetableGetStart,
+    timetableGetSuccess
+} from "@/store/timetable/timetable.slice.ts";
 import {IAddTimetable} from "@/api/timetable/types.ts";
+import {deleteTimetable} from "@/api/timetable";
 
 export const getTimetableAC = () => async (dispatch: Dispatch) => {
     try {
@@ -21,4 +27,16 @@ export const addTimetableAC = (data: IAddTimetable) => async () => {
     const params = {groupname: data.groupname, timetable: data.timetable[0]}
     console.log(params);
     const request = await api.timetable.addTimetable(params);
+}
+
+export const deleteTimetableAC = (id: number) => async (dispatch: Dispatch) => {
+    try {
+        const timetableResponse = await api.timetable.deleteTimetable({id});
+
+        if (timetableResponse.status === 200) {
+            dispatch(localDeleteTimetable(id));
+        }
+    } catch (e: any) {
+        console.error(e);
+    }
 }

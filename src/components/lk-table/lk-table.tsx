@@ -18,17 +18,25 @@ import LkTableItem from "@/components/lk-table/lk-table-item.tsx";
 
 interface LkTableProps {
     loading: boolean;
+    data: any;
+    type?: "users" | "favourites";
 }
 
-const LkTable: FC<LkTableProps> = ({loading}) => {
-    const allUsersData = useAppSelector(state => state.auth.getAllUsersData);
+const LkTable: FC<LkTableProps> = ({loading, data, type = "users"}) => {
     const role = useAppSelector(state => state.auth.profileData.role);
 
     const dispatch = useAppDispatch();
 
-    const lkTableItems: Array<ReactElement> | null = allUsersData.allUsers && allUsersData.allUsers.map(user =>
-        <LkTableItem key={user.id} id={user.id} username={user.username} email={user.email} roles={user.roles}/>
-    )
+    if (type === "users") {
+
+    }
+    const lkTableItems: Array<ReactElement> | null = data && data.map(item => {
+        if (type === "users") {
+            return <LkTableItem key={item.id} id={item.id} username={item.username} email={item.email} roles={item.roles}/>
+        } else if (type === "favourites"){
+            return <LkTableItem key={item.id} id={item.id} username={item.groupName} email={item.publicationDate} roles={item.moderatorName}/>
+        }
+    })
 
     const [addTimetableForm, setAddTimetableForm] = useState(false);
     const [groupname, setGroupName] = useState("");
@@ -67,9 +75,6 @@ const LkTable: FC<LkTableProps> = ({loading}) => {
                         </div>
                         <div className={"flex flex-col gap-2"}>
                             {lkTableItems}
-                            {(role === "ROLE_MODERATOR" || role === "ROLE_ADMIN")
-                                && <Button onClick={() => {setAddTimetableForm(true)}} className={"h-10 rounded-xl"}>Добавить расписание</Button>
-                            }
                         </div>
                     </div>
                 }

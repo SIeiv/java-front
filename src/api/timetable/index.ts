@@ -15,3 +15,8 @@ export const addTimetable = (params: IAddTimetable) =>
             "Content-Type": "multipart/form-data"
         }
     });
+
+export const deleteTimetable = (params: {id: number}) =>
+    axiosInstance.delete(endpoints.TIMETABLE.DELETE_TIMETABLE, {data: params, headers: {
+            "Content-Type": "multipart/form-data"
+        }});

@@ -6,6 +6,7 @@ import Timetable from "@/components/timetable/timetable.tsx";
 import {getAvatarAC} from "@/store/auth/actionCreators.ts";
 import {Label} from "@/components/ui/label.tsx";
 import {Skeleton} from "@/components/ui/skeleton.tsx";
+import {getFavouritesAC} from "@/store/profile/actionCreators.ts";
 
 
 const Main = () => {
@@ -19,6 +20,7 @@ const Main = () => {
     useEffect(() => {
         dispatch(getTimetableAC());
         if (!avatar) dispatch(getAvatarAC());
+        dispatch(getFavouritesAC());
     }, [])
 
     return (

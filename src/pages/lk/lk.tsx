@@ -1,6 +1,6 @@
-import {useNavigate} from "react-router";
+import {Route, Routes, useNavigate} from "react-router";
 import {useAppDispatch, useAppSelector} from "@/hooks.ts";
-import {ReactElement, useEffect, useRef, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {Button} from "@/components/ui/button.tsx";
 import {clearProfileData} from "@/store/auth/auth.slice.ts";
 
@@ -19,6 +19,8 @@ import Header from "@/components/header.tsx";
 import Loading from "@/components/ui/loading.tsx";
 import LkTable from "@/components/lk-table/lk-table.tsx";
 import {Label} from "@/components/ui/label.tsx";
+import LkNav from "@/pages/lk/lk-nav.tsx";
+import {getFavouritesAC} from "@/store/profile/actionCreators.ts";
 
 const Lk = () => {
     const navigate = useNavigate();
@@ -27,7 +29,8 @@ const Lk = () => {
     const profile = useAppSelector(state => state.auth.profileData.profile);
     const role = useAppSelector(state => state.auth.profileData.role);
     const avatar = useAppSelector(state => state.auth.avatarData.avatar);
-    const getAllUsersData = useAppSelector(state => state.auth.getAllUsersData)
+    const getAllUsersData = useAppSelector(state => state.auth.getAllUsersData);
+    const favourites = useAppSelector(state => state.profile.favourites);
 
     const isAvatarLoading = useAppSelector(state => state.auth.avatarData.isLoading);
     const isProfileLoading = useAppSelector(state => state.auth.profileData.isLoading);
@@ -44,6 +47,7 @@ const Lk = () => {
         }
         if (!avatar) dispatch(getAvatarAC());
         dispatch(getAllUsers());
+        dispatch(getFavouritesAC());
     }, [])
 
     const handleAvatar = async () => {
@@ -51,10 +55,6 @@ const Lk = () => {
         dispatch(getAvatarAC());
         setAvatarForm(false);
     }
-
-    const userEls: ReactElement[] | null = getAllUsersData.allUsers && getAllUsersData.allUsers.map(user => {
-        return <div>{user.id} {user.username} {user.email} {user.roles}</div>
-    })
 
     return (
         <div className={"w-full h-full bg-slate-50"}>
@@ -117,21 +117,43 @@ const Lk = () => {
                             }}>Выйти</Button>
                         </div>
                     </div>
-                    <div className={"flex flex-col w-full p-2.5 box-border bg-white rounded-xl"}>
-                        Users list
+                    <div className={"flex flex-col items-start w-full p-2.5 box-border bg-white rounded-xl"}>
+                        <LkNav/>
                         <div>
 
                         </div>
-                        <div className={"flex justify-between px-3"}>
-                            <Label className={"w-[188px] h-10 flex items-center"}>Id</Label>
-                            <Label className={"w-[200px] h-10 flex items-center"}>Username</Label>
-                            <Label className={"w-[200px] h-10 flex items-center"}>Email</Label>
-                            <Label className={"w-[188px] h-10 flex items-center"}>Роль</Label>
-                            <div className={"w-[188px] h-10"}></div>
-                        </div>
-                        <div className={"overflow-auto"}>
-                            <LkTable loading={false}/>
-                        </div>
+                        <Routes>
+                            <Route path="users" element={
+                                <div className={"flex flex-col items-start w-full p-2.5 box-border bg-white rounded-xl"}>
+                                    <div className={"flex justify-between px-3"}>
+                                        <Label className={"w-[188px] h-10 flex items-center"}>Id</Label>
+                                        <Label className={"w-[200px] h-10 flex items-center"}>Username</Label>
+                                        <Label className={"w-[200px] h-10 flex items-center"}>Email</Label>
+                                        <Label className={"w-[188px] h-10 flex items-center"}>Роль</Label>
+                                        <div className={"w-[140px] h-10"}></div>
+                                    </div>
+                                    <div className={"overflow-auto max-h-[350px] box-border"}>
+                                        <LkTable loading={false} data={getAllUsersData.allUsers}/>
+                                    </div>
+                                </div>
+                            }/>
+                            <Route path="fav" element={
+                                <div
+                                    className={"flex flex-col items-start w-full p-2.5 box-border bg-white rounded-xl"}>
+                                    <div className={"flex justify-between px-3"}>
+                                        <Label className={"w-[188px] h-10 flex items-center"}>№</Label>
+                                        <Label className={"w-[200px] h-10 flex items-center"}>Название группы</Label>
+                                        <Label className={"w-[200px] h-10 flex items-center"}>Дата публикации</Label>
+                                        <Label className={"w-[188px] h-10 flex items-center"}>Автор публикации</Label>
+                                        <div className={"w-[140px] h-10"}></div>
+                                    </div>
+                                    <div className={"overflow-auto h-[350px] box-border"}>
+                                        <LkTable loading={false} data={favourites.data} type={"favourites"}/>
+                                    </div>
+                                </div>
+                            }/>
+                        </Routes>
+
 
                     </div>
 
