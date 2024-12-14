@@ -6,6 +6,7 @@ import Timetable from "@/components/timetable/timetable.tsx";
 import {getAvatarAC} from "@/store/auth/actionCreators.ts";
 import {Label} from "@/components/ui/label.tsx";
 import {Skeleton} from "@/components/ui/skeleton.tsx";
+import {getTimetable} from "@/store/timetable/timetable.slice.ts";
 
 
 const Main = () => {
