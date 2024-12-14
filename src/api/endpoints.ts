@@ -9,6 +9,8 @@ const endpoints = {
         PUT_AVATAR: "http://localhost:8080/api/user/update-picture",
         GET_PICTURE: "http://localhost:8080/api/user/get-picture",
         CURRENT_USER: "http://localhost:8080/api/user/current-user",
+
+        GET_ALL_USERS: "http://localhost:8080/api/admin/users",
     },
     TIMETABLE: {
         GET_TIMETABLES: "http://localhost:8080/api/timetable/load",

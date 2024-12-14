@@ -5,7 +5,7 @@ import {
     appInitializeStart, appInitializeSuccess,
     avatarFail,
     avatarStart,
-    avatarSuccess, loadProfileFail,
+    avatarSuccess, getAllUsersStart, getAllUsersSuccess, loadProfileFail,
     loadProfileStart,
     loadProfileSuccess,
     loginFail,
@@ -89,6 +89,18 @@ export const getProfile = () => async (dispatch: Dispatch) => {
     } catch (e: any) {
         console.error(e);
         dispatch(loadProfileFail(e.message));
+    }
+}
+
+export const getAllUsers = () => async (dispatch: Dispatch) => {
+    try {
+        dispatch(getAllUsersStart());
+
+        const response = await api.profile.getAllUsers();
+
+        dispatch(getAllUsersSuccess(response.data));
+    } catch (e: any) {
+        console.error(e);
     }
 }
 

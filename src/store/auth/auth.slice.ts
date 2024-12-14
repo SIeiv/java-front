@@ -1,5 +1,5 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {IProfileResponse} from "@/api/profile/types.ts";
+import {IProfileResponse, IUser} from "@/api/profile/types.ts";
 
 const initialState = {
     authData: {
@@ -20,6 +20,11 @@ const initialState = {
         isLoading: false as boolean,
         error: null as null | string,
         role: null as null | "ROLE_USER" | "ROLE_ADMIN" | "ROLE_MODERATOR",
+    },
+
+    getAllUsersData: {
+        allUsers: null as null | IUser[],
+        isLoading: false as boolean
     },
 
     avatarData: {
@@ -64,6 +69,8 @@ export const authSlice = createSlice({
             state.logoutData.error = action.payload;
         },
 
+
+
         regStart: (state) => {
             state.regData.isLoading = true;
         },
@@ -88,6 +95,14 @@ export const authSlice = createSlice({
         loadProfileFail: (state, action: PayloadAction<string>) => {
             state.profileData.isLoading = false;
             state.profileData.error = action.payload;
+        },
+
+        getAllUsersStart: (state) => {
+            state.getAllUsersData.isLoading = true;
+        },
+        getAllUsersSuccess: (state, action: PayloadAction<IUser[]>) => {
+            state.getAllUsersData.allUsers = action.payload;
+            state.getAllUsersData.isLoading = false;
         },
 
         clearProfileData: (state) => {
@@ -132,7 +147,7 @@ export const {
     regFail, regSuccess,
     avatarFail, avatarStart,
     regStart, avatarSuccess,
-    clearProfileData, setRegisterError, logoutStart, logoutSuccess, logoutFail, appInitializeStart, appInitializeSuccess, appInitializeFail
+    clearProfileData, setRegisterError, logoutStart, getAllUsersStart, getAllUsersSuccess, logoutSuccess, logoutFail, appInitializeStart, appInitializeSuccess, appInitializeFail
 } = authSlice.actions;
 
 export default authSlice.reducer;
