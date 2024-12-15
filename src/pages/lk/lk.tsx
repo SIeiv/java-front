@@ -141,11 +141,11 @@ const Lk = () => {
                                 <div
                                     className={"flex flex-col items-start w-full p-2.5 box-border bg-white rounded-xl"}>
                                     <div className={"flex justify-between px-3"}>
-                                        <Label className={"w-[188px] h-10 flex items-center"}>№</Label>
+                                        <Label className={"w-[100px] h-10 flex items-center"}>№</Label>
                                         <Label className={"w-[200px] h-10 flex items-center"}>Название группы</Label>
                                         <Label className={"w-[200px] h-10 flex items-center"}>Дата публикации</Label>
                                         <Label className={"w-[188px] h-10 flex items-center"}>Автор публикации</Label>
-                                        <div className={"w-[140px] h-10"}></div>
+                                        <div className={"w-[188px] h-10"}></div>
                                     </div>
                                     <div className={"overflow-auto h-[350px] box-border"}>
                                         <LkTable loading={false} data={favourites.data} type={"favourites"}/>

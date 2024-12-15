@@ -137,6 +137,18 @@ export const authSlice = createSlice({
             state.appInitializeData.isLoading = false;
             state.appInitializeData.error = action.payload;
         },
+
+        localUpdateUser: (state, action: PayloadAction<IUser>) => {
+            if (state.getAllUsersData.allUsers) {
+                state.getAllUsersData.allUsers.forEach(item => {
+                    if (item.id === action.payload.id) {
+                        item.email = action.payload.email;
+                        item.roles = action.payload.roles;
+                        item.username = action.payload.username;
+                    }
+                })
+            }
+        }
     }
 })
 
@@ -147,7 +159,9 @@ export const {
     regFail, regSuccess,
     avatarFail, avatarStart,
     regStart, avatarSuccess,
-    clearProfileData, setRegisterError, logoutStart, getAllUsersStart, getAllUsersSuccess, logoutSuccess, logoutFail, appInitializeStart, appInitializeSuccess, appInitializeFail
+    clearProfileData, setRegisterError,
+    logoutStart, getAllUsersStart, getAllUsersSuccess,
+    logoutSuccess, logoutFail, appInitializeStart, appInitializeSuccess, appInitializeFail, localUpdateUser
 } = authSlice.actions;
 
 export default authSlice.reducer;

@@ -7,7 +7,7 @@ export interface IUser {
     id: number,
     username: string,
     email: string,
-    roles: string
+    roles: "ROLE_ADMIN" | "ROLE_MODERATOR" | "ROLE_USER",
 }
 
 export interface IFavourite {
@@ -15,4 +15,9 @@ export interface IFavourite {
     groupName: string,
     publicationDate: string,
     moderatorName: string,
+}
+
+export interface IUpdateUserRequest extends IUser {
+    profilePicture: null;
+    password: string | null;
 }

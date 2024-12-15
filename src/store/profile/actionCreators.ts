@@ -4,10 +4,14 @@ import {
     loadfavouritesFail,
     loadfavouritesStart,
     loadfavouritesSuccess,
-    localAddToFavourites
+    localAddToFavourites, localDeleteToFavourites
 } from "@/store/profile/profile.slice.ts";
 import {store} from "@/store";
-import {initSetTimetableFavourite} from "@/store/timetable/timetable.slice.ts";
+import {
+    initSetTimetableFavourite,
+    localAddToFavouritesUpdate,
+    localDeleteToFavouritesUpdate
+} from "@/store/timetable/timetable.slice.ts";
 
 export const getFavouritesAC = () => async (dispatch: Dispatch) => {
     try {
@@ -25,6 +29,7 @@ export const getFavouritesAC = () => async (dispatch: Dispatch) => {
 
 export const addToFavoritesAC = (id: number) => async (dispatch: Dispatch) => {
     try {
+        dispatch(localAddToFavouritesUpdate(id));
         const request = await api.profile.addFavourite({timetable_id: id});
 
         if (request.status === 200) {
@@ -34,6 +39,20 @@ export const addToFavoritesAC = (id: number) => async (dispatch: Dispatch) => {
                     dispatch(localAddToFavourites(item));
                 }
             })
+        }
+    } catch (error) {
+        console.error(error);
+    }
+
+}
+
+export const deleteFromFavoritesAC = (id: number) => async (dispatch: Dispatch) => {
+    try {
+        dispatch(localDeleteToFavouritesUpdate(id));
+        const request = await api.profile.deleteFavourite({timetable_id: id});
+
+        if (request.status === 200) {
+            dispatch(localDeleteToFavourites(id));
         }
     } catch (error) {
         console.error(error);

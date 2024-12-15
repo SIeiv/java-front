@@ -40,3 +40,15 @@ export const deleteTimetableAC = (id: number) => async (dispatch: Dispatch) => {
         console.error(e);
     }
 }
+
+export const editTimetableAC = (id: number) => async (dispatch: Dispatch) => {
+    try {
+        const timetableResponse = await api.timetable.deleteTimetable({id});
+
+        if (timetableResponse.status === 200) {
+            dispatch(localDeleteTimetable(id));
+        }
+    } catch (e: any) {
+        console.error(e);
+    }
+}

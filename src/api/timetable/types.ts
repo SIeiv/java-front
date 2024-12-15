@@ -3,10 +3,15 @@ export interface IGetTimetableItemResponse {
     "groupName": string,
     "publicationDate": string,
     "moderatorName": string,
-    isFavourite: boolean,
+    favourite: boolean,
 }
 
 export interface IAddTimetable {
     timetable: any,
     groupname: string,
+}
+
+export interface IEditTimetableRequest {
+    id: number,
+    groupName: string,
 }

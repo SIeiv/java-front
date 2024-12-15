@@ -1,7 +1,7 @@
 import { axiosInstance } from "@/api/instance.ts";
 import {AxiosPromise} from "axios";
 import endpoints from "@/api/endpoints.ts";
-import {IFavourite, IUser} from "@/api/profile/types.ts";
+import {IFavourite, IUpdateUserRequest, IUser} from "@/api/profile/types.ts";
 
 export const getProfile = (): AxiosPromise<string> =>
     axiosInstance.get(endpoints.PROFILE.GET_PROFILE);
@@ -27,6 +27,9 @@ export const getAllUsers = (): AxiosPromise<IUser[]> =>
 export const getFavourites = (): AxiosPromise<IFavourite[]> =>
     axiosInstance.get(endpoints.PROFILE.GET_FAVOURITES);
 
+export const updateUser = (params: IUpdateUserRequest): AxiosPromise<IFavourite[]> =>
+    axiosInstance.put(endpoints.PROFILE.UPDATE_USER, params);
+
 export const addFavourite = (params: {timetable_id: number}) =>
     axiosInstance.put(endpoints.PROFILE.ADD_FAVOURITE, params, {
         headers: {
@@ -35,7 +38,7 @@ export const addFavourite = (params: {timetable_id: number}) =>
     });
 
 export const deleteFavourite = (params: {timetable_id: number}) =>
-    axiosInstance.delete(endpoints.PROFILE.ADD_FAVOURITE, {data: params,
+    axiosInstance.delete(endpoints.PROFILE.DELETE_FAVOURITE, {data: params,
         headers: {
             "Content-Type": "multipart/form-data"
         }});

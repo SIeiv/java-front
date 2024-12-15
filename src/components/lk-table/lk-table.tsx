@@ -27,14 +27,11 @@ const LkTable: FC<LkTableProps> = ({loading, data, type = "users"}) => {
 
     const dispatch = useAppDispatch();
 
-    if (type === "users") {
-
-    }
     const lkTableItems: Array<ReactElement> | null = data && data.map(item => {
         if (type === "users") {
-            return <LkTableItem key={item.id} id={item.id} username={item.username} email={item.email} roles={item.roles}/>
+            return <LkTableItem key={item.id} id={item.id} username={item.username} email={item.email} roles={item.roles} type={"users"}/>
         } else if (type === "favourites"){
-            return <LkTableItem key={item.id} id={item.id} username={item.groupName} email={item.publicationDate} roles={item.moderatorName}/>
+            return <LkTableItem key={item.id} id={item.id} username={item.groupName} email={item.publicationDate} roles={item.moderatorName} isFavourite={item.favourites} type={"favourites"}/>
         }
     })
 

@@ -26,7 +26,7 @@ const Timetable: FC<TimetableProps> = ({loading}) => {
     const dispatch = useAppDispatch();
 
     const timetableItems: Array<ReactElement> | null = timetableData && timetableData.map(item =>
-        <TimetableItem key={item.id} num={item.id} groupName={item.groupName} publicationDate={item.publicationDate} moderatorName={item.moderatorName} isFavorite={item.isFavourite}/>
+        <TimetableItem key={item.id} num={item.id} groupName={item.groupName} publicationDate={item.publicationDate} moderatorName={item.moderatorName} isFavorite={item.favourite}/>
     )
 
     const [addTimetableForm, setAddTimetableForm] = useState(false);

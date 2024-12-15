@@ -28,6 +28,7 @@ export const authSlice = createSlice({
 
         localAddToFavourites: (state, action: PayloadAction<IFavourite>) => {
             state.favourites.data.push(action.payload);
+
         },
         localDeleteToFavourites: (state, action: PayloadAction<number>) => {
             state.favourites.data.filter(item => item.id !== action.payload)

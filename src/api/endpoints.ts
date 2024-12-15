@@ -11,6 +11,7 @@ const endpoints = {
         CURRENT_USER: "http://localhost:8080/api/user/current-user",
 
         GET_ALL_USERS: "http://localhost:8080/api/admin/users",
+        UPDATE_USER: "http://localhost:8080/api/admin/update-user",
 
         GET_FAVOURITES: "http://localhost:8080/api/user/get-favourites",
         ADD_FAVOURITE: "http://localhost:8080/api/user/add-favourite",
@@ -21,6 +22,7 @@ const endpoints = {
         GET_VIEWS: "http://localhost:8080/api/views/get-views-count",
         ADD_TIMETABLE: "http://localhost:8080/api/timetable/upload",
         DELETE_TIMETABLE: "http://localhost:8080/api/timetable/delete",
+        UPDATE_TIMETABLE: "http://localhost:8080/api/timetable/update",
     }
 
 }

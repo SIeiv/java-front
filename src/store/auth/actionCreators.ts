@@ -7,7 +7,7 @@ import {
     avatarStart,
     avatarSuccess, getAllUsersStart, getAllUsersSuccess, loadProfileFail,
     loadProfileStart,
-    loadProfileSuccess,
+    loadProfileSuccess, localUpdateUser,
     loginFail,
     loginStart,
     loginSuccess, logoutFail, logoutStart, logoutSuccess, regFail,
@@ -15,6 +15,7 @@ import {
 } from "@/store/auth/auth.slice.ts";
 import api from "../../api";
 import {store} from "@/store";
+import {IUpdateUserRequest} from "@/api/profile/types.ts";
 
 
 export const loginUser =
@@ -99,6 +100,19 @@ export const getAllUsers = () => async (dispatch: Dispatch) => {
         const response = await api.profile.getAllUsers();
 
         dispatch(getAllUsersSuccess(response.data));
+    } catch (e: any) {
+        console.error(e);
+    }
+}
+
+export const updateUserAC = (data: IUpdateUserRequest) => async (dispatch: Dispatch) => {
+    try {
+        const response = await api.profile.updateUser(data);
+
+        if (response.status === 200) {
+            dispatch(localUpdateUser(data));
+        }
+
     } catch (e: any) {
         console.error(e);
     }
