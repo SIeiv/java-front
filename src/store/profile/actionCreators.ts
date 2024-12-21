@@ -49,11 +49,12 @@ export const addToFavoritesAC = (id: number) => async (dispatch: Dispatch) => {
 export const deleteFromFavoritesAC = (id: number) => async (dispatch: Dispatch) => {
     try {
         dispatch(localDeleteToFavouritesUpdate(id));
+        dispatch(localDeleteToFavourites(id));
         const request = await api.profile.deleteFavourite({timetable_id: id});
 
-        if (request.status === 200) {
-            dispatch(localDeleteToFavourites(id));
-        }
+        /*if (request.status === 200) {
+
+        }*/
     } catch (error) {
         console.error(error);
     }

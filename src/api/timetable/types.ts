@@ -14,4 +14,7 @@ export interface IAddTimetable {
 export interface IEditTimetableRequest {
     id: number,
     groupName: string,
+    publicationDate: string,
+    moderatorName: string,
+    file?: string
 }

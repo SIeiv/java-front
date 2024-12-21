@@ -26,7 +26,7 @@ const Login = () => {
 
     const handleSubmit = async () => {
         await dispatch(loginUser({email, password}));
-        navigate("/lk");
+        navigate("/lk/fav");
     };
 
     return (

@@ -22,4 +22,4 @@ export const deleteTimetable = (params: {id: number}) =>
         }});
 
 export const editTimetable = (params: IEditTimetableRequest) =>
-    axiosInstance.put(endpoints.TIMETABLE.ADD_TIMETABLE, params);
+    axiosInstance.put(endpoints.TIMETABLE.UPDATE_TIMETABLE, params);

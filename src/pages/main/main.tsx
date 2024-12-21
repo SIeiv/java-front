@@ -13,12 +13,13 @@ const Main = () => {
     const dispatch = useAppDispatch();
 
     const isTimetableLoading = useAppSelector(state => state.timetable.timetableData.isLoading);
+    const timetable = useAppSelector(state => state.timetable.timetableData.timetable);
     const avatar = useAppSelector(state => state.auth.avatarData.avatar);
     const viewsCount = useAppSelector(state => state.timetable.timetableData.viewsCount);
 
 
     useEffect(() => {
-        dispatch(getTimetableAC());
+        if (!timetable) dispatch(getTimetableAC());
         if (!avatar) dispatch(getAvatarAC());
         dispatch(getFavouritesAC());
     }, [])

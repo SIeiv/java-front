@@ -28,7 +28,11 @@ export const getFavourites = (): AxiosPromise<IFavourite[]> =>
     axiosInstance.get(endpoints.PROFILE.GET_FAVOURITES);
 
 export const updateUser = (params: IUpdateUserRequest): AxiosPromise<IFavourite[]> =>
-    axiosInstance.put(endpoints.PROFILE.UPDATE_USER, params);
+    axiosInstance.put(endpoints.PROFILE.UPDATE_USER, params, {
+        headers: {
+            "Content-Type": "application/json"
+        }
+    });
 
 export const addFavourite = (params: {timetable_id: number}) =>
     axiosInstance.put(endpoints.PROFILE.ADD_FAVOURITE, params, {

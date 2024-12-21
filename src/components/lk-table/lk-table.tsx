@@ -31,7 +31,7 @@ const LkTable: FC<LkTableProps> = ({loading, data, type = "users"}) => {
         if (type === "users") {
             return <LkTableItem key={item.id} id={item.id} username={item.username} email={item.email} roles={item.roles} type={"users"}/>
         } else if (type === "favourites"){
-            return <LkTableItem key={item.id} id={item.id} username={item.groupName} email={item.publicationDate} roles={item.moderatorName} isFavourite={item.favourites} type={"favourites"}/>
+            return <LkTableItem key={item.id} id={item.id} username={item.groupName} email={item.publicationDate} roles={item.moderatorName} isFavorite={item.favourites} type={"favourites"}/>
         }
     })
 

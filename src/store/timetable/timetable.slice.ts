@@ -1,5 +1,5 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {IGetTimetableItemResponse} from "@/api/timetable/types.ts";
+import {IEditTimetableRequest, IGetTimetableItemResponse} from "@/api/timetable/types.ts";
 import {IFavourite} from "@/api/profile/types.ts";
 
 const initialState = {
@@ -57,12 +57,26 @@ export const timetableSlice = createSlice({
                     item.favourite = false;
                 }
             })
-        }
+        },
+
+        localEditTimetable: (state, action: PayloadAction<IEditTimetableRequest>) => {
+            state.timetableData.timetable!.forEach(timetable => {
+                if (timetable.id === action.payload.id) {
+                    timetable.publicationDate = action.payload.publicationDate;
+                    timetable.groupName = action.payload.groupName;
+                    timetable.moderatorName = action.payload.moderatorName;
+                }
+            })
+        },
+
+        resetTimetable: () => initialState
     }
 })
 
 export const {
-    timetableGetStart, timetableGetSuccess, timetableGetFail, initSetTimetableFavourite, localDeleteTimetable, localDeleteToFavouritesUpdate, localAddToFavouritesUpdate
+    timetableGetStart, timetableGetSuccess, timetableGetFail, initSetTimetableFavourite,
+    localDeleteTimetable, localDeleteToFavouritesUpdate, localAddToFavouritesUpdate, resetTimetable,
+    localEditTimetable
 } = timetableSlice.actions;
 
 export default timetableSlice.reducer;

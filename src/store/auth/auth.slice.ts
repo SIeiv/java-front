@@ -148,7 +148,9 @@ export const authSlice = createSlice({
                     }
                 })
             }
-        }
+        },
+
+        resetAuth: () => initialState
     }
 })
 
@@ -161,7 +163,7 @@ export const {
     regStart, avatarSuccess,
     clearProfileData, setRegisterError,
     logoutStart, getAllUsersStart, getAllUsersSuccess,
-    logoutSuccess, logoutFail, appInitializeStart, appInitializeSuccess, appInitializeFail, localUpdateUser
+    logoutSuccess, logoutFail, appInitializeStart, appInitializeSuccess, appInitializeFail, localUpdateUser, resetAuth
 } = authSlice.actions;
 
 export default authSlice.reducer;

@@ -107,6 +107,7 @@ export const getAllUsers = () => async (dispatch: Dispatch) => {
 
 export const updateUserAC = (data: IUpdateUserRequest) => async (dispatch: Dispatch) => {
     try {
+        console.log(data);
         const response = await api.profile.updateUser(data);
 
         if (response.status === 200) {

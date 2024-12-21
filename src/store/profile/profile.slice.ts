@@ -1,5 +1,6 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {IFavourite} from "@/api/profile/types.ts";
+import {IEditTimetableRequest} from "@/api/timetable/types.ts";
 
 const initialState = {
     favourites: {
@@ -31,13 +32,28 @@ export const authSlice = createSlice({
 
         },
         localDeleteToFavourites: (state, action: PayloadAction<number>) => {
-            state.favourites.data.filter(item => item.id !== action.payload)
-        }
+            state.favourites.data.forEach((item, index) => {
+                if (item.id === action.payload) {
+                    state.favourites.data.splice(index, 1);
+                }
+            })
+        },
+
+        localEditFavourite: (state, action: PayloadAction<IEditTimetableRequest>) => {
+            state.favourites.data.forEach((item) => {
+                if (item.id === action.payload.id) {
+                    item.groupName = action.payload.groupName;
+                }
+            })
+        },
+
+        resetProfile: () => initialState
     }
 })
 
 export const {
-    loadfavouritesStart, loadfavouritesSuccess, loadfavouritesFail, localAddToFavourites, localDeleteToFavourites
+    loadfavouritesStart, loadfavouritesSuccess, loadfavouritesFail, localAddToFavourites, localDeleteToFavourites,
+    resetProfile, localEditFavourite
 } = authSlice.actions;
 
 export default authSlice.reducer;

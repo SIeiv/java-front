@@ -1,4 +1,4 @@
-import {FC, useState} from "react";
+import {FC, useRef, useState} from "react";
 import {IUpdateUserRequest, IUser} from "@/api/profile/types.ts";
 import {Button} from "@/components/ui/button.tsx";
 import TimetableControlButtons from "@/components/timetable/timetable-control-buttons.tsx";
@@ -29,22 +29,31 @@ const LkTableItem: FC<ILkTableItem> = ({id, username, email, roles, type, isFavo
     const [editRole, setEditRole] = useState(roles);
     const [editEmail, setEditEmail] = useState(email);
     const [editUsername, setEditUsername] = useState(username);
-    const handleEditUser = () => {
-        const data: IUpdateUserRequest = {
-            id,
-            roles: editRole,
-            username: editUsername,
-            email: editEmail,
-            password: null,
-            profilePicture: null
-        }
+    const [editPassword, setEditPassword] = useState("");
+    const avatarRef = useRef<HTMLInputElement>(null);
+    const handleEditUser = async () => {
 
-        dispatch(updateUserAC(data));
-        setEditUserForm(false);
+        const reader = new FileReader();
+        reader.readAsDataURL(avatarRef.current!.files![0]);
+        reader.onload = function () {
+            const profilePicture = reader.result!.toString().replace("data:image/jpeg;base64,", "");
+
+            const data: IUpdateUserRequest = {
+                id,
+                roles: editRole,
+                username: editUsername,
+                email: editEmail,
+                password: editPassword,
+                profilePicture: profilePicture ? profilePicture : null
+            }
+
+            dispatch(updateUserAC(data));
+            setEditUserForm(false);
+        };
     }
 
     return (
-        <div className={"flex items-center justify-between rounded-xl px-3 shadow h-10"}>
+        <div className={"flex items-center rounded-xl px-3 shadow h-10 w-full"}>
 
             <Dialog open={editUserForm} onOpenChange={() => {setEditUserForm(false)}}>
                 <DialogContent>
@@ -69,11 +78,13 @@ const LkTableItem: FC<ILkTableItem> = ({id, username, email, roles, type, isFavo
                             </div>
                             <div className={"flex flex-col gap-1.5"}>
                                 <Label>Аватарка</Label>
-                                <Input disabled></Input>
+                                <Input type={"file"} ref={avatarRef}></Input>
                             </div>
                             <div className={"flex flex-col gap-1.5"}>
                                 <Label>Пароль</Label>
-                                <Input disabled></Input>
+                                <Input value={editPassword} onChange={(e) => {
+                                    setEditPassword(e.target.value)
+                                }}></Input>
                             </div>
                         </DialogDescription>
                     </DialogHeader>
@@ -83,17 +94,17 @@ const LkTableItem: FC<ILkTableItem> = ({id, username, email, roles, type, isFavo
                 </DialogContent>
             </Dialog>
 
-            <div className={"w-[100px]"}>{id}</div>
+            <div className={"w-[50px]"}>{id}</div>
             <div className={"w-[200px]"}>{username}</div>
             <div className={"w-[200px]"}>{email}</div>
             <div className={"w-[188px]"}>{roles}</div>
-            <div className={"w-[205px] flex items-center justify-center"}>
+            <div className={"w-[255px] flex items-center justify-center"}>
                 {type === "favourites"
                     && <div className={"flex items-center justify-center"}>
                         <Button variant={"ghost"} className={""}>
                             <a href={`http://localhost:8080/api/timetable/download?id=${id}`}>Скачать</a>
                         </Button>
-                        <TimetableControlButtons isFavorite={isFavorite} num={id} groupName={username}/>
+                        <TimetableControlButtons isFavorite={true} num={id} groupName={username} publicationDate={email} moderatorName={roles}/>
                     </div>
                 }
                 {type === "users"

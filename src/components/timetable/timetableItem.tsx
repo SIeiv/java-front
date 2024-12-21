@@ -24,7 +24,7 @@ const TimetableItem: FC<TimetableItemProps> = ({num, groupName, publicationDate,
                 <Button variant={"ghost"} className={""}>
                     <a href={`http://localhost:8080/api/timetable/download?id=${num}`}>Скачать</a>
                 </Button>
-                <TimetableControlButtons isFavorite={isFavorite} num={num} groupName={groupName}/>
+                <TimetableControlButtons isFavorite={isFavorite} num={num} groupName={groupName} moderatorName={moderatorName} publicationDate={publicationDate}/>
             </div>
         </div>
     );

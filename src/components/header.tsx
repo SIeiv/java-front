@@ -17,7 +17,7 @@ const Header = () => {
                 </NavLink>
                 {profile
                     ? <Button variant={"ghost"} className={"h-15"}>
-                        <NavLink to={"/lk"}>
+                        <NavLink to={"/lk/fav"}>
                             <div className={"flex items-center gap-3"}>
                                 <span>{profile.username}</span>
                                 <Avatar>

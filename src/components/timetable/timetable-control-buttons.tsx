@@ -2,9 +2,9 @@ import {Button} from "@/components/ui/button.tsx";
 import {addToFavoritesAC, deleteFromFavoritesAC} from "@/store/profile/actionCreators.ts";
 import filledStar from "@/assets/star.svg";
 import {PenLine, Star, Trash2} from "lucide-react";
-import {deleteTimetableAC} from "@/store/timetable/actionCreators.ts";
+import {deleteTimetableAC, editTimetableAC} from "@/store/timetable/actionCreators.ts";
 import {useAppDispatch, useAppSelector} from "@/hooks.ts";
-import {FC, useState} from "react";
+import {FC, useRef, useState} from "react";
 import {
     Dialog,
     DialogContent,
@@ -14,22 +14,46 @@ import {
     DialogTitle
 } from "@/components/ui/dialog.tsx";
 import {Input} from "@/components/ui/input.tsx";
+import {DatePicker} from "@/components/ui/datepicker.tsx";
+import {IEditTimetableRequest} from "@/api/timetable/types.ts";
+import {IUpdateUserRequest} from "@/api/profile/types.ts";
+import {updateUserAC} from "@/store/auth/actionCreators.ts";
 
 interface ITimetableControlButtons {
     isFavorite: boolean;
     num: number;
     groupName: string;
+    publicationDate: string;
+    moderatorName: string;
 }
 
-const TimetableControlButtons: FC<ITimetableControlButtons> = ({isFavorite, num, groupName}) => {
+const TimetableControlButtons: FC<ITimetableControlButtons> = ({isFavorite, num, groupName, publicationDate, moderatorName}) => {
     const dispatch = useAppDispatch();
     const profileData = useAppSelector(state => state.auth.profileData);
-
     const [editTimetableForm, setEditTimetableForm] = useState(false);
-    const [editTimetableId, setEditTimetableId] = useState(num);
     const [editTimetableGroupName, setEditTimetableGroupName] = useState(groupName);
-    const handleEditTimetable = () => {
+    const [editTimetablePublicationDate, setEditTimetablePublicationDate] = useState(publicationDate);
+    const fileRef = useRef<HTMLInputElement>(null);
 
+    console.log(groupName, publicationDate, moderatorName);
+
+    const handleEditTimetable = () => {
+        const reader = new FileReader();
+        reader.readAsDataURL(fileRef.current!.files![0]);
+        reader.onload = function () {
+            const picture = reader.result!.toString().replace("data:image/jpeg;base64,", "");
+
+            const data: IEditTimetableRequest = {
+                id: num,
+                groupName: editTimetableGroupName,
+                moderatorName,
+                publicationDate,
+                file: picture
+            }
+
+            dispatch(editTimetableAC(data));
+            setEditTimetableForm(false);
+        };
     }
 
     return (
@@ -38,12 +62,16 @@ const TimetableControlButtons: FC<ITimetableControlButtons> = ({isFavorite, num,
             <Dialog open={editTimetableForm} onOpenChange={() => {setEditTimetableForm(false)}}>
                 <DialogContent>
                     <DialogHeader>
-                        <DialogTitle>Добавить расписание</DialogTitle>
-                        <DialogDescription>
-                            <Input placeholder={"id"} value={editTimetableId}
-                                   onChange={(e) => {setEditTimetableId(Number(e.target.value))}}/>
+                        <DialogTitle>Изменить расписание</DialogTitle>
+                        <DialogDescription className={"flex flex-col gap-2"}>
                             <Input placeholder={"Название группы"} value={editTimetableGroupName}
                                    onChange={(e) => {setEditTimetableGroupName(e.target.value)}}/>
+                            {/*<DatePicker initialDate={editTimetablePublicationDate} initialTimeSetter={setEditTimetablePublicationDate}/>*/}
+                            {/*<Input placeholder={"Дата публикации"} value={editTimetablePublicationDate}
+                                   onChange={(e) => {setEditTimetablePublicationDate(e.target.value)}}/>*/}
+                            {/*<Input placeholder={"Автор"} value={editTimetableModeratorName}
+                                   onChange={(e) => {setEditTimetableModeratorName(e.target.value)}}/>*/}
+                            <Input placeholder={"Аватарка"} ref={fileRef} type={"file"}/>
                         </DialogDescription>
                     </DialogHeader>
                     <DialogFooter>
@@ -55,7 +83,7 @@ const TimetableControlButtons: FC<ITimetableControlButtons> = ({isFavorite, num,
             {profileData.profile && <div className={"flex items-center justify-center"}>
 
                 {isFavorite
-                    ? <Button variant={"ghost"} onClick={() => {
+                    ? <Button variant={"ghost"} className={"w-11"} onClick={() => {
                         dispatch(deleteFromFavoritesAC(num));
                     }}>
                         <img className={"w-4"} src={filledStar} alt=""/>

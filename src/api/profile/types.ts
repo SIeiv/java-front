@@ -18,6 +18,6 @@ export interface IFavourite {
 }
 
 export interface IUpdateUserRequest extends IUser {
-    profilePicture: null;
+    profilePicture: string | null;
     password: string | null;
 }
