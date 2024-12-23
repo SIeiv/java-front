@@ -45,10 +45,18 @@ const Timetable: FC<TimetableProps> = ({loading}) => {
             <Dialog open={addTimetableForm} onOpenChange={() => {setAddTimetableForm(false)}}>
                 <DialogContent>
                     <DialogHeader>
-                        <DialogTitle>Добавить расписание</DialogTitle>
-                        <DialogDescription>
-                            <Input placeholder={"Название группы"} value={groupname} onChange={(e) => {setGroupName(e.target.value)}}/>
-                            <Input className={"mt-2"} type="file" ref={avatarFileRef}/>
+                        <DialogTitle className={"mb-3"}>Добавить расписание</DialogTitle>
+                        <DialogDescription className={"flex flex-col gap-3"}>
+                            <div className={"flex flex-col gap-1.5"}>
+                                <Label>Название группы</Label>
+                                <Input placeholder={"Введите название группы"} value={groupname} onChange={(e) => {
+                                    setGroupName(e.target.value)
+                                }}/>
+                            </div>
+                            <div className={"flex flex-col gap-1.5"}>
+                                <Label>Файл расписания</Label>
+                                <Input className={""} type="file" ref={avatarFileRef}/>
+                            </div>
                         </DialogDescription>
                     </DialogHeader>
                     <DialogFooter>

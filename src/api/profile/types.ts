@@ -3,11 +3,13 @@ export interface IProfileResponse {
     "username": string,
 }
 
+export type UserRolesType = "ROLE_ADMIN" | "ROLE_MODERATOR" | "ROLE_USER"
+
 export interface IUser {
     id: number,
     username: string,
     email: string,
-    roles: "ROLE_ADMIN" | "ROLE_MODERATOR" | "ROLE_USER",
+    roles: UserRolesType,
 }
 
 export interface IFavourite {
@@ -20,4 +22,12 @@ export interface IFavourite {
 export interface IUpdateUserRequest extends IUser {
     profilePicture: string | null;
     password: string | null;
+}
+
+export interface IDeleteUserRequest {
+    id: number
+}
+
+export interface IAddUserRequest extends IUpdateUserRequest {
+
 }

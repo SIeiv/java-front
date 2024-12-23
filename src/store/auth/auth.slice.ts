@@ -1,5 +1,5 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {IProfileResponse, IUser} from "@/api/profile/types.ts";
+import {IAddUserRequest, IDeleteUserRequest, IProfileResponse, IUser} from "@/api/profile/types.ts";
 
 const initialState = {
     authData: {
@@ -20,6 +20,7 @@ const initialState = {
         isLoading: false as boolean,
         error: null as null | string,
         role: null as null | "ROLE_USER" | "ROLE_ADMIN" | "ROLE_MODERATOR",
+        id: null as null | number,
     },
 
     getAllUsersData: {
@@ -28,7 +29,7 @@ const initialState = {
     },
 
     avatarData: {
-        avatar: null as any,
+        avatar: null as null | string,
         isLoading: false as boolean,
         error: null as null | string
     },
@@ -89,6 +90,7 @@ export const authSlice = createSlice({
         loadProfileSuccess: (state, action) => {
             state.profileData.profile = action.payload.profile;
             state.profileData.role = action.payload.role;
+            state.profileData.id = action.payload.id;
             state.profileData.isLoading = false;
             state.profileData.error = null;
         },
@@ -113,7 +115,7 @@ export const authSlice = createSlice({
         avatarStart: (state) => {
             state.avatarData.isLoading = true
         },
-        avatarSuccess: (state, action: PayloadAction<any>) => {
+        avatarSuccess: (state, action: PayloadAction<string>) => {
             state.avatarData.avatar = action.payload;
             state.avatarData.isLoading = false;
         },
@@ -150,6 +152,23 @@ export const authSlice = createSlice({
             }
         },
 
+        localDeleteUser: (state, action: PayloadAction<IDeleteUserRequest>) => {
+            state.getAllUsersData.allUsers!.forEach((user, index) => {
+                if (user.id === action.payload.id) {
+                    state.getAllUsersData.allUsers!.splice(index, 1);
+                }
+            })
+        },
+
+        localAddUser: (state, action: PayloadAction<IAddUserRequest>) => {
+            state.getAllUsersData.allUsers!.push({
+                id: action.payload.id,
+                email: action.payload.email,
+                roles: action.payload.roles,
+                username: action.payload.username,
+            });
+        },
+
         resetAuth: () => initialState
     }
 })
@@ -163,7 +182,9 @@ export const {
     regStart, avatarSuccess,
     clearProfileData, setRegisterError,
     logoutStart, getAllUsersStart, getAllUsersSuccess,
-    logoutSuccess, logoutFail, appInitializeStart, appInitializeSuccess, appInitializeFail, localUpdateUser, resetAuth
+    logoutSuccess, logoutFail, appInitializeStart, appInitializeSuccess,
+    appInitializeFail, localUpdateUser, resetAuth,
+    localDeleteUser, localAddUser
 } = authSlice.actions;
 
 export default authSlice.reducer;

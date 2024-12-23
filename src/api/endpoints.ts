@@ -12,6 +12,8 @@ const endpoints = {
 
         GET_ALL_USERS: "http://localhost:8080/api/admin/users",
         UPDATE_USER: "http://localhost:8080/api/admin/update-user",
+        DELETE_USER: "http://localhost:8080/api/admin/delete-user",
+        ADD_USER: "http://localhost:8080/api/admin/add-user",
 
         GET_FAVOURITES: "http://localhost:8080/api/user/get-favourites",
         ADD_FAVOURITE: "http://localhost:8080/api/user/add-favourite",

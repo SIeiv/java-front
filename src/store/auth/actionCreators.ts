@@ -1,5 +1,5 @@
 import {ILoginRequest, IRegisterRequest} from "@/api/auth/types.ts";
-import {Dispatch} from "@reduxjs/toolkit";
+import {Dispatch, UnknownAction} from "@reduxjs/toolkit";
 import {
     appInitializeFail,
     appInitializeStart, appInitializeSuccess,
@@ -7,7 +7,7 @@ import {
     avatarStart,
     avatarSuccess, getAllUsersStart, getAllUsersSuccess, loadProfileFail,
     loadProfileStart,
-    loadProfileSuccess, localUpdateUser,
+    loadProfileSuccess, localAddUser, localDeleteUser, localUpdateUser,
     loginFail,
     loginStart,
     loginSuccess, logoutFail, logoutStart, logoutSuccess, regFail,
@@ -15,8 +15,7 @@ import {
 } from "@/store/auth/auth.slice.ts";
 import api from "../../api";
 import {store} from "@/store";
-import {IUpdateUserRequest} from "@/api/profile/types.ts";
-
+import {IAddUserRequest, IDeleteUserRequest, IUpdateUserRequest} from "@/api/profile/types.ts";
 
 export const loginUser =
     (data: ILoginRequest) => async (dispatch: Dispatch) => {
@@ -79,14 +78,14 @@ export const registerUser = (data: IRegisterRequest) => async (dispatch: Dispatc
     }
 }
 
-export const getProfile = () => async (dispatch: Dispatch) => {
+export const getProfile = () => async (dispatch: Dispatch): Promise<void> => {
     try {
         dispatch(loadProfileStart());
 
         const responseProfile = await api.profile.getProfile();
         const responseRole = await api.profile.getCurrentUser();
 
-        dispatch(loadProfileSuccess({profile: responseProfile.data, role: responseRole.data[1][0].authority}));
+        dispatch(loadProfileSuccess({profile: responseProfile.data, role: responseRole.data[2][0].authority, id: responseRole.data[0]}));
     } catch (e: any) {
         console.error(e);
         dispatch(loadProfileFail(e.message));
@@ -119,6 +118,34 @@ export const updateUserAC = (data: IUpdateUserRequest) => async (dispatch: Dispa
     }
 }
 
+export const deleteUserAC = (data: IDeleteUserRequest) => async (dispatch: Dispatch) => {
+    try {
+        dispatch(localDeleteUser(data));
+        await api.profile.deleteUser(data);
+
+        /*if (response.status === 200) {
+
+        }*/
+
+    } catch (e: any) {
+        console.error(e);
+    }
+}
+
+export const addUserAC = (data: IAddUserRequest) => async (dispatch: Dispatch) => {
+    try {
+        dispatch(localAddUser(data));
+        await api.profile.addUser(data);
+
+        /*if (response.status === 200) {
+
+        }*/
+
+    } catch (e: any) {
+        console.error(e);
+    }
+}
+
 export const getAccessToken = () => (): string | null => {
     try {
         const accessToken = store.getState().auth.authData.accessToken;
@@ -130,7 +157,7 @@ export const getAccessToken = () => (): string | null => {
 }
 
 export const putAvatarAC = (data: FileList) => async () => {
-    const request = await api.profile.putAvatar({picture: data[0]});
+    await api.profile.putAvatar({picture: data[0]});
 }
 
 export const getAvatarAC = () => async (dispatch: Dispatch) => {

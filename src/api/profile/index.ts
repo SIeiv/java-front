@@ -1,7 +1,7 @@
 import { axiosInstance } from "@/api/instance.ts";
 import {AxiosPromise} from "axios";
 import endpoints from "@/api/endpoints.ts";
-import {IFavourite, IUpdateUserRequest, IUser} from "@/api/profile/types.ts";
+import {IAddUserRequest, IDeleteUserRequest, IFavourite, IUpdateUserRequest, IUser} from "@/api/profile/types.ts";
 
 export const getProfile = (): AxiosPromise<string> =>
     axiosInstance.get(endpoints.PROFILE.GET_PROFILE);
@@ -29,6 +29,19 @@ export const getFavourites = (): AxiosPromise<IFavourite[]> =>
 
 export const updateUser = (params: IUpdateUserRequest): AxiosPromise<IFavourite[]> =>
     axiosInstance.put(endpoints.PROFILE.UPDATE_USER, params, {
+        headers: {
+            "Content-Type": "application/json"
+        }
+    });
+
+export const deleteUser = (params: IDeleteUserRequest): AxiosPromise<IFavourite[]> =>
+    axiosInstance.delete(endpoints.PROFILE.DELETE_USER, {data: params,
+        headers: {
+            "Content-Type": "multipart/form-data"
+        }});
+
+export const addUser = (params: IAddUserRequest): AxiosPromise<IFavourite[]> =>
+    axiosInstance.post(endpoints.PROFILE.ADD_USER, params, {
         headers: {
             "Content-Type": "application/json"
         }

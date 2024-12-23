@@ -14,10 +14,8 @@ import {
     DialogTitle
 } from "@/components/ui/dialog.tsx";
 import {Input} from "@/components/ui/input.tsx";
-import {DatePicker} from "@/components/ui/datepicker.tsx";
 import {IEditTimetableRequest} from "@/api/timetable/types.ts";
-import {IUpdateUserRequest} from "@/api/profile/types.ts";
-import {updateUserAC} from "@/store/auth/actionCreators.ts";
+import {Label} from "@/components/ui/label.tsx";
 
 interface ITimetableControlButtons {
     isFavorite: boolean;
@@ -32,7 +30,7 @@ const TimetableControlButtons: FC<ITimetableControlButtons> = ({isFavorite, num,
     const profileData = useAppSelector(state => state.auth.profileData);
     const [editTimetableForm, setEditTimetableForm] = useState(false);
     const [editTimetableGroupName, setEditTimetableGroupName] = useState(groupName);
-    const [editTimetablePublicationDate, setEditTimetablePublicationDate] = useState(publicationDate);
+    /*const [editTimetablePublicationDate, setEditTimetablePublicationDate] = useState(publicationDate);*/
     const fileRef = useRef<HTMLInputElement>(null);
 
     console.log(groupName, publicationDate, moderatorName);
@@ -62,16 +60,24 @@ const TimetableControlButtons: FC<ITimetableControlButtons> = ({isFavorite, num,
             <Dialog open={editTimetableForm} onOpenChange={() => {setEditTimetableForm(false)}}>
                 <DialogContent>
                     <DialogHeader>
-                        <DialogTitle>Изменить расписание</DialogTitle>
-                        <DialogDescription className={"flex flex-col gap-2"}>
-                            <Input placeholder={"Название группы"} value={editTimetableGroupName}
-                                   onChange={(e) => {setEditTimetableGroupName(e.target.value)}}/>
+                        <DialogTitle className={"mb-3"}>Изменить расписание</DialogTitle>
+                        <DialogDescription className={"flex flex-col gap-3"}>
+                            <div className={"flex flex-col gap-1.5"}>
+                                <Label>Название группы</Label>
+                                <Input placeholder={"Введите название группы"} value={editTimetableGroupName}
+                                       onChange={(e) => {setEditTimetableGroupName(e.target.value)}}/>
+                            </div>
+
                             {/*<DatePicker initialDate={editTimetablePublicationDate} initialTimeSetter={setEditTimetablePublicationDate}/>*/}
                             {/*<Input placeholder={"Дата публикации"} value={editTimetablePublicationDate}
                                    onChange={(e) => {setEditTimetablePublicationDate(e.target.value)}}/>*/}
                             {/*<Input placeholder={"Автор"} value={editTimetableModeratorName}
                                    onChange={(e) => {setEditTimetableModeratorName(e.target.value)}}/>*/}
-                            <Input placeholder={"Аватарка"} ref={fileRef} type={"file"}/>
+                            <div className={"flex flex-col gap-1.5"}>
+                                <Label>Файл расписания</Label>
+                                <Input ref={fileRef} type={"file"}/>
+                            </div>
+
                         </DialogDescription>
                     </DialogHeader>
                     <DialogFooter>

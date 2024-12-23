@@ -2,7 +2,6 @@ import {Route, Routes, useNavigate} from "react-router";
 import {useAppDispatch, useAppSelector} from "@/hooks.ts";
 import {useEffect, useRef, useState} from "react";
 import {Button} from "@/components/ui/button.tsx";
-import {clearProfileData} from "@/store/auth/auth.slice.ts";
 
 import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar"
 import {
@@ -24,6 +23,8 @@ import {getFavouritesAC} from "@/store/profile/actionCreators.ts";
 import {resetAll} from "@/store/commonAC.ts";
 import {getTimetableAC} from "@/store/timetable/actionCreators.ts";
 import {ILkNavDataType} from "@/types.ts";
+import {Plus} from "lucide-react";
+import LkUserInteraction from "@/components/forms/lk-user-interaction.tsx";
 
 const Lk = () => {
     const navigate = useNavigate();
@@ -42,6 +43,7 @@ const Lk = () => {
 
     const [avatarForm, setAvatarForm] = useState(false);
 
+    const [addUserForm, setAddUserForm] = useState(false);
 
     const avatarFileRef = useRef<HTMLInputElement>(null)
 
@@ -101,6 +103,8 @@ const Lk = () => {
                 </DialogContent>
             </Dialog>
 
+            <LkUserInteraction formState={addUserForm} setFormState={setAddUserForm} type={"add"}/>
+
             <div className={"w-[1248px] h-[535px] mt-3.5 m-auto flex flex-col gap-3.5"}>
                 <div className={"text-xl font-medium flex gap-2 bg-white p-2.5 box-border rounded-xl"}>
                     <span>Личный кабинет</span>
@@ -114,7 +118,7 @@ const Lk = () => {
                         <Avatar className={"w-48 h-48 text-8xl"}>
                             {!isAvatarLoading
                                 ? <div>
-                                    <AvatarImage src={avatar}/>
+                                    <AvatarImage src={avatar!}/>
                                     <AvatarFallback
                                         className={"w-48 h-full pb-5"}>{profile ? profile.username[0] : "U"}</AvatarFallback>
                                 </div>
@@ -148,39 +152,53 @@ const Lk = () => {
                         </div>
                     </div>
                     <div className={"flex flex-col items-start w-full p-2.5 box-border bg-white rounded-xl"}>
-                        <LkNav data={lkNavData}/>
-                        <div>
+                        <div className={"flex items-center justify-between w-full"}>
+                            <LkNav data={lkNavData}/>
+                            <Routes>
+                                <Route path="users" element={
+                                    <Button className={"[&_svg]:size-6 size-8"} onClick={() => {
+                                        setAddUserForm(true);
+                                    }}>
+                                        <Plus />
+                                    </Button>
+                                }/>
+                            </Routes>
 
                         </div>
+
                         <Routes>
                             <Route path="users" element={
                                 <div
-                                    className={"flex flex-col items-start w-full p-2.5 box-border bg-white rounded-xl"}>
+                                    className={"flex flex-col items-start w-full h-full pt-2.5 box-border bg-white rounded-xl"}>
                                     <div className={"flex justify-between px-3"}>
                                         <Label className={"w-[50px] h-10 flex items-center"}>Id</Label>
-                                        <Label className={"w-[200px] h-10 flex items-center"}>Username</Label>
-                                        <Label className={"w-[200px] h-10 flex items-center"}>Email</Label>
+                                        <Label className={"w-[225px] h-10 flex items-center"}>Username</Label>
+                                        <Label className={"w-[225px] h-10 flex items-center"}>Email</Label>
                                         <Label className={"w-[188px] h-10 flex items-center"}>Роль</Label>
-                                        <div className={"w-[140px] h-10"}></div>
+                                        <div className={"w-[168px] h-10"}></div>
                                     </div>
-                                    <div className={"overflow-auto max-h-[350px] box-border"}>
+                                    <div className={"overflow-auto max-h-[360px] box-border w-full"}>
                                         <LkTable loading={false} data={getAllUsersData.allUsers}/>
                                     </div>
                                 </div>
                             }/>
                             <Route path="fav" element={
                                 <div
-                                    className={"flex flex-col items-start p-2.5 box-border bg-white rounded-xl w-full"}>
+                                    className={"flex flex-col items-start pt-2.5 box-border bg-white rounded-xl w-full h-full"}>
                                     <div className={"flex px-3 w-full"}>
                                         <Label className={"w-[50px] h-10 flex items-center"}>№</Label>
-                                        <Label className={"w-[200px] h-10 flex items-center"}>Название группы</Label>
-                                        <Label className={"w-[200px] h-10 flex items-center"}>Дата публикации</Label>
+                                        <Label className={"w-[225px] h-10 flex items-center"}>Название группы</Label>
+                                        <Label className={"w-[225px] h-10 flex items-center"}>Дата публикации</Label>
                                         <Label className={"w-[188px] h-10 flex items-center"}>Автор публикации</Label>
-                                        <div className={"w-[188px] h-10"}></div>
+                                        <div className={"w-[168px] h-10"}></div>
                                     </div>
-                                    <div className={"overflow-auto h-[350px] box-border w-full"}>
-                                        <LkTable loading={false} data={favourites.data} type={"favourites"}/>
-                                    </div>
+                                    {favourites.data.length
+                                        ? <div className={"overflow-auto h-[360px] box-border w-full"}>
+                                            <LkTable loading={false} data={favourites.data} type={"favourites"}/>
+                                        </div>
+                                        : <Label className={"w-full h-full flex items-center justify-center text-lg"}>Как то здесь пуcтовато...</Label>
+                                    }
+
                                 </div>
                             }/>
                         </Routes>

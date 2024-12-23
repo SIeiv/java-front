@@ -1,7 +1,6 @@
 import {Label} from "@/components/ui/label.tsx";
 import {useAppDispatch, useAppSelector} from "@/hooks.ts";
 import {FC, ReactElement, useRef, useState} from "react";
-import TimetableItem from "@/components/timetable/timetableItem.tsx";
 import {Skeleton} from "@/components/ui/skeleton.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import {
@@ -13,7 +12,6 @@ import {
     DialogTitle
 } from "@/components/ui/dialog.tsx";
 import {Input} from "@/components/ui/input.tsx";
-import {addTimetableAC, getTimetableAC} from "@/store/timetable/actionCreators.ts";
 import LkTableItem from "@/components/lk-table/lk-table-item.tsx";
 
 interface LkTableProps {
@@ -23,9 +21,6 @@ interface LkTableProps {
 }
 
 const LkTable: FC<LkTableProps> = ({loading, data, type = "users"}) => {
-    const role = useAppSelector(state => state.auth.profileData.role);
-
-    const dispatch = useAppDispatch();
 
     const lkTableItems: Array<ReactElement> | null = data && data.map(item => {
         if (type === "users") {
@@ -46,15 +41,21 @@ const LkTable: FC<LkTableProps> = ({loading, data, type = "users"}) => {
     }*/
 
     return (
-        <div className={"w-full h-full"}>
+        <div className={"w-full h-full pr-3"}>
 
             <Dialog open={addTimetableForm} onOpenChange={() => {setAddTimetableForm(false)}}>
                 <DialogContent>
                     <DialogHeader>
                         <DialogTitle>Добавить расписание</DialogTitle>
                         <DialogDescription>
-                            <Input placeholder={"Название группы"} value={groupname} onChange={(e) => {setGroupName(e.target.value)}}/>
-                            <Input className={"mt-2"} type="file" ref={avatarFileRef}/>
+                            <div>
+                                <Label>Название группы</Label>
+                                <Input placeholder={"Введите название группы"} value={groupname} onChange={(e) => {setGroupName(e.target.value)}}/>
+                            </div>
+                            <div>
+                                <Label>Файл расписания</Label>
+                                <Input className={"mt-2"} type="file" ref={avatarFileRef}/>
+                            </div>
                         </DialogDescription>
                     </DialogHeader>
                     <DialogFooter>
