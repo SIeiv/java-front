@@ -39,7 +39,7 @@ const TimetableControlButtons: FC<ITimetableControlButtons> = ({isFavorite, num,
         const reader = new FileReader();
         reader.readAsDataURL(fileRef.current!.files![0]);
         reader.onload = function () {
-            const picture = reader.result!.toString().replace("data:image/jpeg;base64,", "");
+            const picture = reader.result!.toString().replace("data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,", "");
 
             const data: IEditTimetableRequest = {
                 id: num,
