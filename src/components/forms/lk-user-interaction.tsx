@@ -30,33 +30,58 @@ const LkUserInteraction: FC<ILkUserInteractionProps> = ({setFormState, formState
     const [editUsername, setEditUsername] = useState(user ? user.username : "");
     const [editPassword, setEditPassword] = useState("");
     const avatarRef = useRef<HTMLInputElement>(null);
+
+    const [error, setError] = useState("");
+
     const handleEditUser = async () => {
 
-        const reader = new FileReader();
-        reader.readAsDataURL(avatarRef.current!.files![0]);
-        reader.onload = function () {
-            const profilePicture = reader.result!.toString().replace("data:image/jpeg;base64,", "");
-
+        const he = (profilePicture: string | null) => {
             const data: IUpdateUserRequest = {
                 id: user ? user.id : -1,
                 roles: editRole,
                 username: editUsername,
                 email: editEmail,
                 password: editPassword,
-                profilePicture: profilePicture ? profilePicture : null
+                profilePicture: profilePicture
             }
 
-            if (type === "edit") {
-                dispatch(updateUserAC(data));
+            if (editEmail === "" || editUsername === "" || editPassword === "") {
+                setError("Поля заполнены некорректно")
             } else {
-                dispatch(addUserAC(data));
+                if (type === "edit") {
+                    dispatch(updateUserAC(data));
+                } else {
+                    dispatch(addUserAC(data));
+                }
+
+                setFormState(false);
+                setEditEmail("");
+                setEditUsername("");
+                setEditPassword("");
+                setError("");
             }
-            setFormState(false);
-        };
+        }
+
+        if (avatarRef.current!.files!.length) {
+            const reader = new FileReader();
+            reader.readAsDataURL(avatarRef.current!.files![0]);
+            reader.onload = function () {
+                const profilePicture = reader.result!.toString().replace("data:image/jpeg;base64,", "");
+
+                he(profilePicture);
+            };
+        } else {
+            he(null);
+        }
+
+
     }
 
     return (
-        <Dialog open={formState} onOpenChange={() => {setFormState(false)}}>
+        <Dialog open={formState} onOpenChange={() => {
+            setFormState(false);
+            setError("");
+        }}>
             <DialogContent>
                 <DialogHeader>
                     <DialogTitle className={"mb-2"}>{type === "edit" ? "Изменить пользователя" : "Создать пользователя"}</DialogTitle>
@@ -87,6 +112,7 @@ const LkUserInteraction: FC<ILkUserInteractionProps> = ({setFormState, formState
                                 setEditPassword(e.target.value)
                             }}></Input>
                         </div>
+                        <Label className={"text-red-600"}>{error}</Label>
                     </DialogDescription>
                 </DialogHeader>
                 <DialogFooter>
