@@ -6,15 +6,16 @@ import {
     timetableGetStart,
     timetableGetSuccess
 } from "@/store/timetable/timetable.slice.ts";
-import {IAddTimetable, IEditTimetableRequest} from "@/api/timetable/types.ts";
+import {IAddTimetable, IEditTimetableRequest} from "@/api/library/types.ts";
 import {localDeleteToFavourites, localEditFavourite} from "@/store/profile/profile.slice.ts";
+import {editTimetable} from "@/api/library";
 
 export const getTimetableAC = () => async (dispatch: Dispatch) => {
     try {
         dispatch(timetableGetStart());
 
-        const timetableResponse = await api.timetable.getTimetable();
-        const viewsResponse = await api.timetable.getTimetableViews();
+        const timetableResponse = await api.library.getAllBooks();
+        const viewsResponse = await api.library.getViews();
 
         dispatch(timetableGetSuccess({timetable: timetableResponse.data, viewsCount: viewsResponse.data}));
     } catch (e: any) {
@@ -24,16 +25,16 @@ export const getTimetableAC = () => async (dispatch: Dispatch) => {
 }
 
 export const addTimetableAC = (data: IAddTimetable) => async () => {
-    const params = {groupname: data.groupname, timetable: data.timetable[0]}
+    const params: IAddTimetable = {author: data.author, Book: data.Book[0], title: data.title};
     console.log(params);
-    await api.timetable.addTimetable(params);
+    await api.library.addTimetable(params);
 }
 
 export const deleteTimetableAC = (id: number) => async (dispatch: Dispatch) => {
     try {
         dispatch(localDeleteTimetable(id));
         dispatch(localDeleteToFavourites(id));
-        await api.timetable.deleteTimetable({id});
+        await api.library.deleteTimetable({id});
 
         /*if (timetableResponse.status === 200) {
 
@@ -45,7 +46,7 @@ export const deleteTimetableAC = (id: number) => async (dispatch: Dispatch) => {
 
 export const editTimetableAC = (data: IEditTimetableRequest) => async (dispatch: Dispatch) => {
     try {
-        const timetableResponse = await api.timetable.editTimetable(data);
+        const timetableResponse = await api.library.editTimetable(data);
 
         if (timetableResponse.status === 200) {
             dispatch(localEditTimetable(data));

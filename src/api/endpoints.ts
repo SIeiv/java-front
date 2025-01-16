@@ -19,12 +19,12 @@ const endpoints = {
         ADD_FAVOURITE: "http://localhost:8080/api/user/add-favourite",
         DELETE_FAVOURITE: "http://localhost:8080/api/user/delete-favourite",
     },
-    TIMETABLE: {
-        GET_TIMETABLES: "http://localhost:8080/api/timetable/load",
+    LIBRARY: {
+        GET_ALL_BOOKS: "http://localhost:8080/api/book/load",
         GET_VIEWS: "http://localhost:8080/api/views/get-views-count",
-        ADD_TIMETABLE: "http://localhost:8080/api/timetable/upload",
-        DELETE_TIMETABLE: "http://localhost:8080/api/timetable/delete",
-        UPDATE_TIMETABLE: "http://localhost:8080/api/timetable/update",
+        ADD_BOOK: "http://localhost:8080/api/book/upload",
+        DELETE_BOOK: "http://localhost:8080/api/book/delete",
+        UPDATE_TIMETABLE: "http://localhost:8080/api/book/update",
     }
 
 }

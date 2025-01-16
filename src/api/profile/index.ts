@@ -47,14 +47,14 @@ export const addUser = (params: IAddUserRequest): AxiosPromise<IFavourite[]> =>
         }
     });
 
-export const addFavourite = (params: {timetable_id: number}) =>
+export const addFavourite = (params: {book_id: number}) =>
     axiosInstance.put(endpoints.PROFILE.ADD_FAVOURITE, params, {
         headers: {
             "Content-Type": "multipart/form-data"
         }
     });
 
-export const deleteFavourite = (params: {timetable_id: number}) =>
+export const deleteFavourite = (params: {book_id: number}) =>
     axiosInstance.delete(endpoints.PROFILE.DELETE_FAVOURITE, {data: params,
         headers: {
             "Content-Type": "multipart/form-data"

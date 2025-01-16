@@ -24,9 +24,10 @@ const LkTable: FC<LkTableProps> = ({loading, data, type = "users"}) => {
 
     const lkTableItems: Array<ReactElement> | null = data && data.map(item => {
         if (type === "users") {
-            return <LkTableItem key={item.id} id={item.id} username={item.username} email={item.email} roles={item.roles} type={"users"}/>
+            return <LkTableItem key={item.id} id={item.id} username={item.username} email={item.email} roles={item.roles} type={"users"} username2={""}/>
         } else if (type === "favourites"){
-            return <LkTableItem key={item.id} id={item.id} username={item.groupName} email={item.publicationDate} roles={item.moderatorName} isFavorite={item.favourites} type={"favourites"}/>
+            return <LkTableItem key={item.id} id={item.id} username={item.title} email={item.publicationDate} roles={item.moderatorName}
+                                isFavorite={item.favourites} type={"favourites"} username2={item.authorName}/>
         }
     })
 
@@ -35,7 +36,7 @@ const LkTable: FC<LkTableProps> = ({loading, data, type = "users"}) => {
     const avatarFileRef = useRef<HTMLInputElement>(null);
 
     /*const handleAddTimetable = async () => {
-        await dispatch(addTimetableAC({groupname, timetable: avatarFileRef.current!.files!}));
+        await dispatch(addTimetableAC({groupname, library: avatarFileRef.current!.files!}));
         dispatch(getTimetableAC());
         setAddTimetableForm(false);
     }*/

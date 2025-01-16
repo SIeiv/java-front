@@ -15,6 +15,8 @@ export interface IUser {
 export interface IFavourite {
     id: number,
     groupName: string,
+    author: string,
+    title: string,
     publicationDate: string,
     moderatorName: string,
 }

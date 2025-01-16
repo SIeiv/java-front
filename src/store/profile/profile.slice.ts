@@ -1,6 +1,6 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {IFavourite} from "@/api/profile/types.ts";
-import {IEditTimetableRequest} from "@/api/timetable/types.ts";
+import {IEditTimetableRequest} from "@/api/library/types.ts";
 
 const initialState = {
     favourites: {
@@ -42,7 +42,8 @@ export const authSlice = createSlice({
         localEditFavourite: (state, action: PayloadAction<IEditTimetableRequest>) => {
             state.favourites.data.forEach((item) => {
                 if (item.id === action.payload.id) {
-                    item.groupName = action.payload.groupName;
+                    item.author = action.payload.author;
+                    item.title = action.payload.title;
                 }
             })
         },

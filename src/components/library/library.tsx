@@ -1,7 +1,7 @@
 import {Label} from "@/components/ui/label.tsx";
 import {useAppDispatch, useAppSelector} from "@/hooks.ts";
 import {FC, ReactElement, useRef, useState} from "react";
-import TimetableItem from "@/components/timetable/timetableItem.tsx";
+import TimetableItem from "@/components/library/timetableItem.tsx";
 import {Skeleton} from "@/components/ui/skeleton.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import {
@@ -15,26 +15,28 @@ import {
 import {Input} from "@/components/ui/input.tsx";
 import {addTimetableAC, getTimetableAC} from "@/store/timetable/actionCreators.ts";
 
-interface TimetableProps {
+interface LibraryProps {
     loading: boolean;
 }
 
-const Timetable: FC<TimetableProps> = ({loading}) => {
+const Library: FC<LibraryProps> = ({loading}) => {
     const timetableData = useAppSelector(state => state.timetable.timetableData.timetable);
     const role = useAppSelector(state => state.auth.profileData.role);
 
     const dispatch = useAppDispatch();
 
     const timetableItems: Array<ReactElement> | null = timetableData && timetableData.map(item =>
-        <TimetableItem key={item.id} num={item.id} groupName={item.groupName} publicationDate={item.publicationDate} moderatorName={item.moderatorName} isFavorite={item.favourite}/>
+        <TimetableItem key={item.id} num={item.id} groupName={item.groupName} publicationDate={item.publicationDate} moderatorName={item.moderatorName}
+                       isFavorite={item.favourite} authorName={item.authorName} title={item.title}/>
     )
 
     const [addTimetableForm, setAddTimetableForm] = useState(false);
-    const [groupname, setGroupName] = useState("");
+    const [bookName, setBookName] = useState("");
+    const [author, setAuthor] = useState("");
     const avatarFileRef = useRef<HTMLInputElement>(null);
 
     const handleAddTimetable = async () => {
-        await dispatch(addTimetableAC({groupname, timetable: avatarFileRef.current!.files!}));
+        await dispatch(addTimetableAC({title: bookName, Book: avatarFileRef.current!.files!, author}));
         dispatch(getTimetableAC());
         setAddTimetableForm(false);
     }
@@ -45,16 +47,22 @@ const Timetable: FC<TimetableProps> = ({loading}) => {
             <Dialog open={addTimetableForm} onOpenChange={() => {setAddTimetableForm(false)}}>
                 <DialogContent>
                     <DialogHeader>
-                        <DialogTitle className={"mb-3"}>Добавить расписание</DialogTitle>
+                        <DialogTitle className={"mb-3"}>Добавить книгу</DialogTitle>
                         <DialogDescription className={"flex flex-col gap-3"}>
                             <div className={"flex flex-col gap-1.5"}>
-                                <Label>Название группы</Label>
-                                <Input placeholder={"Введите название группы"} value={groupname} onChange={(e) => {
-                                    setGroupName(e.target.value)
+                                <Label>Название книги</Label>
+                                <Input placeholder={"Введите название книги"} value={bookName} onChange={(e) => {
+                                    setBookName(e.target.value)
                                 }}/>
                             </div>
                             <div className={"flex flex-col gap-1.5"}>
-                                <Label>Файл расписания</Label>
+                                <Label>Автор книги</Label>
+                                <Input placeholder={"Введите автора книги"} value={author} onChange={(e) => {
+                                    setAuthor(e.target.value)
+                                }}/>
+                            </div>
+                            <div className={"flex flex-col gap-1.5"}>
+                                <Label>Файл книги</Label>
                                 <Input className={""} type="file" ref={avatarFileRef}/>
                             </div>
                         </DialogDescription>
@@ -70,16 +78,17 @@ const Timetable: FC<TimetableProps> = ({loading}) => {
                     ? <Skeleton className={"w-full h-[500px]"}/>
                     : <div>
                         <div className={"flex justify-between px-3"}>
-                            <Label className={"w-[245px] h-10 flex items-center"}>№</Label>
-                            <Label className={"w-[245px] h-10 flex items-center"}>Название группы</Label>
-                            <Label className={"w-[245px] h-10 flex items-center"}>Дата публикации</Label>
-                            <Label className={"w-[245px] h-10 flex items-center"}>Автор публикации</Label>
-                            <div className={"w-[245px] h-10"}></div>
+                            <Label className={"w-[196px] h-10 flex items-center"}>№</Label>
+                            <Label className={"w-[196px] h-10 flex items-center"}>Название</Label>
+                            <Label className={"w-[196px] h-10 flex items-center"}>Автор</Label>
+                            <Label className={"w-[196px] h-10 flex items-center"}>Дата публикации</Label>
+                            <Label className={"w-[196px] h-10 flex items-center"}>Автор публикации</Label>
+                            <div className={"w-[220px] h-10"}></div>
                         </div>
                         <div className={"flex flex-col gap-2"}>
                             {timetableItems}
                             {(role === "ROLE_MODERATOR" || role === "ROLE_ADMIN")
-                                && <Button onClick={() => {setAddTimetableForm(true)}} className={"h-10 rounded-xl"}>Добавить расписание</Button>
+                                && <Button onClick={() => {setAddTimetableForm(true)}} className={"h-10 rounded-xl"}>Добавить книгу</Button>
                             }
                         </div>
                     </div>
@@ -90,4 +99,4 @@ const Timetable: FC<TimetableProps> = ({loading}) => {
     );
 };
 
-export default Timetable;
+export default Library;

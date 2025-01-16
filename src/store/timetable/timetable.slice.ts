@@ -1,11 +1,11 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {IEditTimetableRequest, IGetTimetableItemResponse} from "@/api/timetable/types.ts";
+import {IBook, IEditTimetableRequest} from "@/api/library/types.ts";
 import {IFavourite} from "@/api/profile/types.ts";
 
 const initialState = {
 
     timetableData: {
-        timetable: null as null | Array<IGetTimetableItemResponse>,
+        timetable: null as null | Array<IBook>,
         isLoading: false as boolean,
         error: null as null | string,
         viewsCount: null as null | number
@@ -63,7 +63,8 @@ export const timetableSlice = createSlice({
             state.timetableData.timetable!.forEach(timetable => {
                 if (timetable.id === action.payload.id) {
                     timetable.publicationDate = action.payload.publicationDate;
-                    timetable.groupName = action.payload.groupName;
+                    timetable.authorName = action.payload.author;
+                    timetable.title = action.payload.title;
                     timetable.moderatorName = action.payload.moderatorName;
                 }
             })

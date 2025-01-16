@@ -1,7 +1,7 @@
 import {FC, useState} from "react";
 import {IUser} from "@/api/profile/types.ts";
 import {Button} from "@/components/ui/button.tsx";
-import TimetableControlButtons from "@/components/timetable/timetable-control-buttons.tsx";
+import TimetableControlButtons from "@/components/library/timetable-control-buttons.tsx";
 import {PenLine, Smile, Trash2} from "lucide-react";
 
 import {useAppDispatch, useAppSelector} from "@/hooks.ts";
@@ -12,9 +12,11 @@ import {Label} from "@/components/ui/label.tsx";
 interface ILkTableItem extends IUser {
     type?: "users" | "favourites";
     isFavorite: boolean;
+
+    username2: string;
 }
 
-const LkTableItem: FC<ILkTableItem> = ({id, username, email, roles, type}) => {
+const LkTableItem: FC<ILkTableItem> = ({id, username, username2, email, roles, type}) => {
     const dispatch = useAppDispatch();
     const currentUserId = useAppSelector(state => state.auth.profileData.id);
 
@@ -29,6 +31,7 @@ const LkTableItem: FC<ILkTableItem> = ({id, username, email, roles, type}) => {
 
             <div className={"w-[50px]"}>{id}</div>
             <div className={"w-[225px]"}>{username}</div>
+            <div className={type === "users" ? "" : "w-[225px]"}>{username2}</div>
             <div className={"w-[225px]"}>{email}</div>
             <div className={"w-[188px]"}>{roles}</div>
             <div className={"w-[255px] flex items-center justify-center"}>
@@ -37,7 +40,7 @@ const LkTableItem: FC<ILkTableItem> = ({id, username, email, roles, type}) => {
                         <Button variant={"ghost"} className={""}>
                             <a href={`http://localhost:8080/api/timetable/download?id=${id}`}>Скачать</a>
                         </Button>
-                        <TimetableControlButtons isFavorite={true} num={id} groupName={username} publicationDate={email} moderatorName={roles}/>
+                        <TimetableControlButtons isFavorite={true} num={id} title={username} author={username2} publicationDate={email} moderatorName={roles}/>
                     </div>
                 }
                 {type === "users"

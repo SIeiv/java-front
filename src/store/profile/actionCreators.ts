@@ -30,7 +30,7 @@ export const getFavouritesAC = () => async (dispatch: Dispatch) => {
 export const addToFavoritesAC = (id: number) => async (dispatch: Dispatch) => {
     try {
         dispatch(localAddToFavouritesUpdate(id));
-        const request = await api.profile.addFavourite({timetable_id: id});
+        const request = await api.profile.addFavourite({book_id: id});
 
         if (request.status === 200) {
             const timetable = store.getState().timetable.timetableData.timetable;
@@ -50,7 +50,7 @@ export const deleteFromFavoritesAC = (id: number) => async (dispatch: Dispatch) 
     try {
         dispatch(localDeleteToFavouritesUpdate(id));
         dispatch(localDeleteToFavourites(id));
-        await api.profile.deleteFavourite({timetable_id: id});
+        await api.profile.deleteFavourite({book_id: id});
 
         /*if (request.status === 200) {
 

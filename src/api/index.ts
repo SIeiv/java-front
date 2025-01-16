@@ -1,11 +1,11 @@
 import * as auth from "./auth";
 import * as profile from "./profile";
-import * as timetable from "./timetable";
+import * as library from "./library";
 
 const api = {
     auth,
     profile,
-    timetable
+    library
 }
 
 export default api;

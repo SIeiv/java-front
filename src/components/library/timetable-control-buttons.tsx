@@ -14,36 +14,41 @@ import {
     DialogTitle
 } from "@/components/ui/dialog.tsx";
 import {Input} from "@/components/ui/input.tsx";
-import {IEditTimetableRequest} from "@/api/timetable/types.ts";
+import {IEditTimetableRequest} from "@/api/library/types.ts";
 import {Label} from "@/components/ui/label.tsx";
 
 interface ITimetableControlButtons {
     isFavorite: boolean;
     num: number;
-    groupName: string;
+    title: string;
+    author: string;
     publicationDate: string;
     moderatorName: string;
 }
 
-const TimetableControlButtons: FC<ITimetableControlButtons> = ({isFavorite, num, groupName, publicationDate, moderatorName}) => {
+const TimetableControlButtons: FC<ITimetableControlButtons> = ({isFavorite, num, title, author, publicationDate, moderatorName}) => {
     const dispatch = useAppDispatch();
     const profileData = useAppSelector(state => state.auth.profileData);
     const [editTimetableForm, setEditTimetableForm] = useState(false);
-    const [editTimetableGroupName, setEditTimetableGroupName] = useState(groupName);
+
+    const [editTimetableGroupName, setEditTimetableGroupName] = useState(title);
+    const [editAuthor, setEditAuthor] = useState(author);
+
     /*const [editTimetablePublicationDate, setEditTimetablePublicationDate] = useState(publicationDate);*/
     const fileRef = useRef<HTMLInputElement>(null);
 
-    console.log(groupName, publicationDate, moderatorName);
+    //console.log(groupName, publicationDate, moderatorName);
 
     const handleEditTimetable = () => {
         const reader = new FileReader();
         reader.readAsDataURL(fileRef.current!.files![0]);
         reader.onload = function () {
-            const picture = reader.result!.toString().replace("data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,", "");
+            const picture = reader.result!.toString().replace("data:text/plain;base64,", "");
 
             const data: IEditTimetableRequest = {
                 id: num,
-                groupName: editTimetableGroupName,
+                title: editTimetableGroupName,
+                author: editAuthor,
                 moderatorName,
                 publicationDate,
                 file: picture
@@ -60,12 +65,21 @@ const TimetableControlButtons: FC<ITimetableControlButtons> = ({isFavorite, num,
             <Dialog open={editTimetableForm} onOpenChange={() => {setEditTimetableForm(false)}}>
                 <DialogContent>
                     <DialogHeader>
-                        <DialogTitle className={"mb-3"}>Изменить расписание</DialogTitle>
+                        <DialogTitle className={"mb-3"}>Изменить книгу</DialogTitle>
                         <DialogDescription className={"flex flex-col gap-3"}>
                             <div className={"flex flex-col gap-1.5"}>
-                                <Label>Название группы</Label>
-                                <Input placeholder={"Введите название группы"} value={editTimetableGroupName}
-                                       onChange={(e) => {setEditTimetableGroupName(e.target.value)}}/>
+                                <Label>Название книги</Label>
+                                <Input placeholder={"Введите название книги"} value={editTimetableGroupName}
+                                       onChange={(e) => {
+                                           setEditTimetableGroupName(e.target.value)
+                                       }}/>
+                            </div>
+                            <div className={"flex flex-col gap-1.5"}>
+                                <Label>Автор книги</Label>
+                                <Input placeholder={"Введите автора книги"} value={editAuthor}
+                                       onChange={(e) => {
+                                           setEditAuthor(e.target.value)
+                                       }}/>
                             </div>
 
                             {/*<DatePicker initialDate={editTimetablePublicationDate} initialTimeSetter={setEditTimetablePublicationDate}/>*/}
@@ -74,7 +88,7 @@ const TimetableControlButtons: FC<ITimetableControlButtons> = ({isFavorite, num,
                             {/*<Input placeholder={"Автор"} value={editTimetableModeratorName}
                                    onChange={(e) => {setEditTimetableModeratorName(e.target.value)}}/>*/}
                             <div className={"flex flex-col gap-1.5"}>
-                                <Label>Файл расписания</Label>
+                                <Label>Файл книги</Label>
                                 <Input ref={fileRef} type={"file"}/>
                             </div>
 

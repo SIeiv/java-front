@@ -187,7 +187,8 @@ const Lk = () => {
                                     className={"flex flex-col items-start pt-2.5 box-border bg-white rounded-xl w-full h-full"}>
                                     <div className={"flex px-3 w-full"}>
                                         <Label className={"w-[50px] h-10 flex items-center"}>№</Label>
-                                        <Label className={"w-[225px] h-10 flex items-center"}>Название группы</Label>
+                                        <Label className={"w-[225px] h-10 flex items-center"}>Название</Label>
+                                        <Label className={"w-[225px] h-10 flex items-center"}>Автор</Label>
                                         <Label className={"w-[225px] h-10 flex items-center"}>Дата публикации</Label>
                                         <Label className={"w-[188px] h-10 flex items-center"}>Автор публикации</Label>
                                         <div className={"w-[168px] h-10"}></div>
